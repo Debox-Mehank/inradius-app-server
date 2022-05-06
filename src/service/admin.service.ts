@@ -1,23 +1,23 @@
 import { ApolloError } from "apollo-server";
 import bcrypt from "bcrypt"
-import { LoginInput, RegisterInput, User, UserModel } from "../schema/user.schema";
+import { AdminRegisterInput, AdminLoginInput, Admin, AdminModel } from "../schema/admin.schema";
 import Context from "../types/context";
 import { signJwt } from "../utils/jwt";
 
-class UserService {
-    async createUser(input: RegisterInput) {
+class AdminService {
+    async createAdmin(input: AdminRegisterInput) {
         // Call user model to create user
-        return UserModel.create(input)
+        return AdminModel.create(input)
     }
 
-    private async getUserByEmail(email: string): Promise<User | null> {
-        const user = await UserModel.findOne({ email: email })
+    private async getAdminByEmail(email: string): Promise<Admin | null> {
+        const user = await AdminModel.findOne({ email: email })
         return user
     }
 
-    async login(input: LoginInput, context: Context) {
+    async loginAdmin(input: AdminLoginInput, context: Context) {
         // get user
-        const user = await this.getUserByEmail(input.email)
+        const user = await this.getAdminByEmail(input.email)
 
         if (!user) {
             throw new ApolloError("Invalid email or password!")
@@ -40,4 +40,4 @@ class UserService {
     }
 }
 
-export default UserService
+export default AdminService

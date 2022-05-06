@@ -7,6 +7,9 @@ import cookieParser from "cookie-parser";
 import { ApolloServer } from "apollo-server-express";
 import { ApolloServerPluginLandingPageGraphQLPlayground, ApolloServerPluginLandingPageProductionDefault } from "apollo-server-core";
 import { resolvers } from "./resolvers";
+import { connectToDb } from "./utils/db";
+import { TokenType, verifyJwt } from "./utils/jwt";
+import Context from "./types/context";
 
 async function bootstrap() {
     const port = process.env.PORT || 4000
@@ -22,7 +25,15 @@ async function bootstrap() {
 
     const server = new ApolloServer({
         schema,
-        context: (ctx) => ctx,
+        context: (ctx: Context) => {
+            const context = ctx;
+            if (context.req.cookies.accessToken) {
+                const user = verifyJwt<TokenType>(ctx.req.cookies.accessToken)
+                context.user = user?.user
+                context.role = user?.role
+            }
+            return context
+        },
         plugins: [
             process.env.NODE_ENV === "production" ?
                 ApolloServerPluginLandingPageProductionDefault() :
@@ -37,5 +48,7 @@ async function bootstrap() {
     app.listen({ port }, () => {
         console.info(`Graphql server started on : http://localhost:${port}`)
     })
+
+    connectToDb()
 }
 bootstrap()
