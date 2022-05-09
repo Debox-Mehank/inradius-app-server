@@ -4,7 +4,7 @@ import { TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
 import { IsEmail, MaxLength, MinLength } from "class-validator";
 import { Field, ID, InputType, ObjectType, registerEnumType } from "type-graphql";
 
-enum UserRole {
+export enum UserRole {
     Employee = "employee",
     Employer = "employer"
 }

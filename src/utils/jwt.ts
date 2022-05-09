@@ -20,6 +20,6 @@ export function verifyJwt<T>(token: string): T | null {
 }
 
 export interface TokenType {
-    user: User | Admin
+    user: string
     role: User['type'] | Admin['type'] | undefined
 }

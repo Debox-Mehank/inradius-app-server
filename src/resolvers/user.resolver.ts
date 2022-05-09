@@ -1,8 +1,10 @@
-import { Arg, createUnionType, Ctx, Mutation, Query, Resolver } from "type-graphql";
+import { Arg, createUnionType, Ctx, Mutation, Query, Resolver, UseMiddleware } from "type-graphql";
 import { Admin } from "../schema/admin.schema";
 import { LoginInput, RegisterInput, User } from "../schema/user.schema";
 import UserService from "../service/user.service";
 import Context from "../types/context";
+import { getUserById } from "../utils/helper";
+import { isAuth } from "../utils/permissions";
 
 const MeUnionType = createUnionType({
     name: "MeUnion", // the name of the GraphQL union
@@ -35,8 +37,13 @@ export default class UserResolver {
         return this.userService.login(input, context)
     }
 
-    @Query(() => MeUnionType)
-    me(@Ctx() context: Context) {
-        return context.user
-    }
+    // @Query(() => MeUnionType)
+    // @UseMiddleware(isAuth)
+    // user(@Ctx() context: Context) {
+    //     // if(context.role == ) {
+
+    //     // }
+    //     // const user = await getUserById(context.user!)
+    //     return context.user
+    // }
 }

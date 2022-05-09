@@ -5,7 +5,7 @@ import { User } from "../schema/user.schema";
 interface Context {
     req: Request,
     res: Response,
-    user: User | Admin | undefined
+    user: string | undefined
     role: Admin['type'] | User['type'] | undefined
 }
 

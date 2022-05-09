@@ -3,7 +3,7 @@ import bcrypt from "bcrypt"
 import { IsEmail } from "class-validator"
 import { Field, ID, InputType, ObjectType, registerEnumType } from "type-graphql"
 
-enum AdminRole {
+export enum AdminRole {
     MASTER = "master",
     ADMIN = "admin",
     NORMAL = "normal"

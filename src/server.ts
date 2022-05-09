@@ -17,7 +17,6 @@ async function bootstrap() {
     // Build the graphql schema
     const schema = await buildSchema({
         resolvers: resolvers,
-        // authChecker: 
     })
 
     const app = express()
@@ -46,7 +45,7 @@ async function bootstrap() {
     server.applyMiddleware({ app })
 
     app.listen({ port }, () => {
-        console.info(`Graphql server started on : http://localhost:${port}`)
+        console.info(`Graphql server started on : http://localhost:${port}/graphql`)
     })
 
     connectToDb()
