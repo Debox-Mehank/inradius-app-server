@@ -1,3 +1,4 @@
+import { ApolloError } from "apollo-server";
 import { Arg, createUnionType, Ctx, Mutation, Query, Resolver, UseMiddleware } from "type-graphql";
 import { Admin } from "../schema/admin.schema";
 import { LoginInput, RegisterInput, User } from "../schema/user.schema";
@@ -37,13 +38,15 @@ export default class UserResolver {
         return this.userService.login(input, context)
     }
 
-    // @Query(() => MeUnionType)
-    // @UseMiddleware(isAuth)
-    // user(@Ctx() context: Context) {
-    //     // if(context.role == ) {
+    @Query(() => User)
+    @UseMiddleware(isAuth)
+    async user(@Ctx() context: Context) {
+        if (context.role === "employee" || context.role === "employer") {
+            const user = await getUserById(context.user!)
+            return user
+        } else {
+            throw new ApolloError("Invalid User!")
+        }
 
-    //     // }
-    //     // const user = await getUserById(context.user!)
-    //     return context.user
-    // }
+    }
 }

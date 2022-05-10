@@ -25,6 +25,10 @@ class UserService {
             throw new ApolloError("Invalid email or password!")
         }
 
+        if (!user.isAccountVerified) {
+            throw new ApolloError("Verify your email id to continue!")
+        }
+
         // compare password
         const isPasswordValid = await bcrypt.compare(input.password, user.password)
 
