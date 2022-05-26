@@ -1,10 +1,9 @@
-import config from "config"
 import jwt from "jsonwebtoken"
 import { Admin } from "../schema/admin.schema"
 import { User } from "../schema/user.schema"
 
-const publicKey = Buffer.from(config.get<string>('publicKey'), 'base64').toString('ascii')
-const privateKey = Buffer.from(config.get<string>('privateKey'), 'base64').toString('ascii')
+const publicKey = Buffer.from(process.env.PUBLIC_KEY!, 'base64').toString('ascii')
+const privateKey = Buffer.from(process.env.PRIVATE_KEY!, 'base64').toString('ascii')
 
 export function signJwt(object: Object, options?: jwt.SignOptions | undefined) {
     return jwt.sign(object, privateKey, { ...(options && options), algorithm: 'RS256' })

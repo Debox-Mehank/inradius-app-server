@@ -5,7 +5,7 @@
   "author": "Mehank Jain",
   "license": "MIT",
   "scripts": {
-    "start": "node dist/src/server.js",
+    "start": "node dist/server.js",
     "postinstall": "tsc",
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts"
   },
@@ -14,7 +14,6 @@
     "apollo-server": "^3.6.7",
     "bcrypt": "^5.0.1",
     "class-validator": "^0.13.2",
-    "config": "^3.3.7",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",
@@ -31,7 +30,6 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
-    "@types/config": "^0.0.41",
     "@types/cookie-parser": "^1.4.3",
     "@types/jsonwebtoken": "^8.5.8",
     "@types/lodash": "^4.14.182",

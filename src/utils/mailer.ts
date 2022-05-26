@@ -1,17 +1,16 @@
-import config from "config"
 import nodemailer, { SendMailOptions } from "nodemailer"
 import { signJwt } from "./jwt"
 
 const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
-        user: config.get<string>('authEmail'),
-        pass: config.get<string>('authPass')
+        user: process.env.AUTH_EMAIL,
+        pass: process.env.AUTH_PASS
     }
 })
 
 export const sendUserVerificationEmail = async ({ email, name, userId }: { email: string, name: string, userId: string }) => {
-    const appUrl = config.get<string>("appUrl")
+    const appUrl = process.env.APP_URL!
     // const uniqueId = nanoid() + userId
 
     const token = signJwt({ email: email, id: userId }, { expiresIn: "15m" })
@@ -19,7 +18,7 @@ export const sendUserVerificationEmail = async ({ email, name, userId }: { email
     const verificationLink = `${appUrl}/email-verification?userId=${userId}&token=${token}`
 
     const mailOptions: SendMailOptions = {
-        from: config.get<string>('authEmail'),
+        from: process.env.AUTH_EMAIL,
         to: email,
         subject: "Verify Your Email!",
         html: `<p style="white-space: pre-line;">Hi ${name}, \n\nWe are excited to have you get started with InRadius for your job / talent search. First, you need to verify that this is your email address by clicking the link below.</p><p>This link will <b>expire in 15 minutes.</b></p><a href='${verificationLink}' target='_blank'>Click Here</a>`
