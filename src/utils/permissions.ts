@@ -11,7 +11,7 @@ export const isAuth: MiddlewareFn<Context> = async ({ context }, next) => {
 };
 
 export const isAdmin: MiddlewareFn<Context> = async ({ context }, next) => {
-    if (context.role === UserRole.Employee || context.role === UserRole.Employer) {
+    if (context.role === UserRole.employee || context.role === UserRole.employer) {
         throw new ApolloError("You are not authorized!")
     }
 
