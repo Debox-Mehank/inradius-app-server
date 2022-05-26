@@ -5,11 +5,11 @@ import { IsEmail, MaxLength, MinLength } from "class-validator";
 import { Field, ID, InputType, ObjectType, registerEnumType } from "type-graphql";
 
 export enum UserRole {
-    Employee = "employee",
-    Employer = "employer"
+    employee = "employee",
+    employer = "employer"
 }
 
-registerEnumType(UserRole, { name: "UserRole", description: "Enum For Type of User Roles i.e. Employer & Employer" })
+registerEnumType(UserRole, { name: "UserRole", description: "Enum For Type of User Roles i.e. Employer & Employee" })
 
 @pre<User>("save", async function () {
     // check if password is being modified
@@ -108,4 +108,14 @@ export class LoginInput {
 
     @Field(() => String, { nullable: false })
     password: string
+}
+
+@InputType()
+export class EmailVerifyInput {
+    @IsEmail()
+    @Field(() => String, { nullable: false })
+    email: string
+
+    @Field(() => String, { nullable: false })
+    token: string
 }

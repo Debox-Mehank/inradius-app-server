@@ -19,6 +19,11 @@ export function verifyJwt<T>(token: string): T | null {
     }
 }
 
+export interface VerificationTokenType {
+    email: string,
+    id: string
+}
+
 export interface TokenType {
     user: string
     role: User['type'] | Admin['type'] | undefined

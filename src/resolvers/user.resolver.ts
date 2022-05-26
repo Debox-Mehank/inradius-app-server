@@ -1,25 +1,10 @@
 import { ApolloError } from "apollo-server";
-import { Arg, createUnionType, Ctx, Mutation, Query, Resolver, UseMiddleware } from "type-graphql";
-import { Admin } from "../schema/admin.schema";
-import { LoginInput, RegisterInput, User } from "../schema/user.schema";
+import { Arg, Ctx, Mutation, Query, Resolver, UseMiddleware } from "type-graphql";
+import { EmailVerifyInput, LoginInput, RegisterInput, User } from "../schema/user.schema";
 import UserService from "../service/user.service";
 import Context from "../types/context";
 import { getUserById } from "../utils/helper";
 import { isAuth } from "../utils/permissions";
-
-const MeUnionType = createUnionType({
-    name: "MeUnion", // the name of the GraphQL union
-    types: () => [User, Admin] as const, // function that returns tuple of object types classes
-    resolveType: value => {
-        if ("name" in value) {
-            return Admin; // we can return object type class (the one with `@ObjectType()`)
-        }
-        if ("firstName" in value) {
-            return User; // or the schema name of the type as a string
-        }
-        return undefined;
-    },
-});
 
 @Resolver()
 export default class UserResolver {
@@ -36,6 +21,23 @@ export default class UserResolver {
     @Query(() => String)
     login(@Arg('input') input: LoginInput, @Ctx() context: Context) {
         return this.userService.login(input, context)
+    }
+
+    @Query(() => Boolean)
+    verifyEmail(@Arg('input') input: EmailVerifyInput, @Ctx() context: Context) {
+        return this.userService.verifyEmail(input, context)
+    }
+
+    @Query(() => Boolean)
+    @UseMiddleware(isAuth)
+    updateSurveyStatus(@Ctx() context: Context) {
+        return this.userService.updateSurveyStatus(context)
+    }
+
+    @Query(() => Boolean)
+    @UseMiddleware(isAuth)
+    updateProfileStatus(@Ctx() context: Context) {
+        return this.userService.updateProfileStatus(context)
     }
 
     @Query(() => User)

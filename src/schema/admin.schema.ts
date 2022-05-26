@@ -4,9 +4,9 @@ import { IsEmail } from "class-validator"
 import { Field, ID, InputType, ObjectType, registerEnumType } from "type-graphql"
 
 export enum AdminRole {
-    MASTER = "master",
-    ADMIN = "admin",
-    NORMAL = "normal"
+    master = "master",
+    admin = "admin",
+    normal = "normal"
 }
 
 registerEnumType(AdminRole, { name: "AdminRole", description: "Enum For Type of Admin Roles i.e. Master, Admin & Normal" })

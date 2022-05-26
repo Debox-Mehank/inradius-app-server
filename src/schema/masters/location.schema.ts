@@ -1,5 +1,5 @@
-import { getModelForClass, index, pre, prop } from "@typegoose/typegoose"
-import { Field, ID, InputType, ObjectType, registerEnumType } from "type-graphql"
+import { getModelForClass, index, prop } from "@typegoose/typegoose"
+import { Field, ID, InputType, ObjectType } from "type-graphql"
 
 @index({ location: 1 })
 @ObjectType()

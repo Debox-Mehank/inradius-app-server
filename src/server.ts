@@ -1,6 +1,7 @@
 import dotenv from "dotenv"
 dotenv.config();
 import "reflect-metadata"
+import cors from "cors"
 import express from "express"
 import { buildSchema } from "type-graphql";
 import cookieParser from "cookie-parser";
@@ -20,6 +21,7 @@ async function bootstrap() {
     })
 
     const app = express()
+    app.use(cors())
     app.use(cookieParser())
 
     const server = new ApolloServer({
@@ -45,7 +47,7 @@ async function bootstrap() {
     server.applyMiddleware({ app })
 
     app.listen({ port }, () => {
-        console.info(`Graphql server started on : http://localhost:${port}/graphql`)
+        console.info(`Graphql server started on port : ${port}`)
     })
 
     connectToDb()
