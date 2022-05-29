@@ -3,58 +3,61 @@ import { Field, InputType, ObjectType, registerEnumType } from "type-graphql";
 import { Survey } from "../masters/survey.schema";
 
 export enum DesignationEnum {
-    manager = "manager",
-    director = "director",
-    techlead = "techlead"
+  manager = "manager",
+  director = "director",
+  techlead = "techlead",
 }
 
-registerEnumType(DesignationEnum, { name: "DesignationEnum", description: "Enum For Designation of Employee" })
+registerEnumType(DesignationEnum, {
+  name: "DesignationEnum",
+  description: "Enum For Designation of Employee",
+});
 
 // Custom WorkExp Class
 @ObjectType()
 export class UserWorkExp {
-    @Field(() => String)
-    @prop({ required: true })
-    company: string
+  @Field(() => String)
+  @prop({ required: true })
+  company: string;
 
-    @Field(() => DesignationEnum)
-    @prop({ required: true })
-    designation: DesignationEnum
+  @Field(() => DesignationEnum)
+  @prop({ required: true })
+  designation: DesignationEnum;
 
-    @Field(() => String)
-    @prop({ required: true })
-    desc: String
+  @Field(() => String)
+  @prop({ required: true })
+  desc: String;
 
-    @Field(() => Date,)
-    @prop({ required: true })
-    start: Date
+  @Field(() => Date)
+  @prop({ required: true })
+  start: Date;
 
-    @Field(() => Date, { nullable: true })
-    @prop({ required: false, default: null })
-    end: Date
+  @Field(() => Date, { nullable: true })
+  @prop({ default: null })
+  end: Date;
 
-    @Field(() => Boolean)
-    @prop({ required: true, default: false })
-    current: boolean
+  @Field(() => Boolean)
+  @prop({ required: true, default: false })
+  current: boolean;
 }
 
 @InputType()
 export class UserWorkExpInput {
-    @Field(() => String)
-    company: string
+  @Field(() => String)
+  company: string;
 
-    @Field(() => DesignationEnum)
-    designation: DesignationEnum
+  @Field(() => DesignationEnum)
+  designation: DesignationEnum;
 
-    @Field(() => String)
-    desc: string
+  @Field(() => String)
+  desc: string;
 
-    @Field(() => Date)
-    start: Date
+  @Field(() => Date)
+  start: Date;
 
-    @Field(() => Date)
-    end: Date
+  @Field(() => Date, { nullable: true })
+  end: Date;
 
-    @Field(() => Boolean)
-    current: boolean
+  @Field(() => Boolean)
+  current: boolean;
 }

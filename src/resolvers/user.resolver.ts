@@ -1,6 +1,18 @@
 import { ApolloError } from "apollo-server";
-import { Arg, Ctx, Mutation, Query, Resolver, UseMiddleware } from "type-graphql";
-import { EmailVerifyInput, LoginInput, RegisterInput, User } from "../schema/user.schema";
+import {
+  Arg,
+  Ctx,
+  Mutation,
+  Query,
+  Resolver,
+  UseMiddleware,
+} from "type-graphql";
+import {
+  EmailVerifyInput,
+  LoginInput,
+  RegisterInput,
+  User,
+} from "../schema/user.schema";
 import UserService from "../service/user.service";
 import Context from "../types/context";
 import { getUserById } from "../utils/helper";
@@ -8,47 +20,50 @@ import { isAuth } from "../utils/permissions";
 
 @Resolver()
 export default class UserResolver {
+  constructor(private userService: UserService) {
+    this.userService = new UserService();
+  }
 
-    constructor(private userService: UserService) {
-        this.userService = new UserService()
+  @Mutation(() => User)
+  register(@Arg("input") input: RegisterInput) {
+    return this.userService.createUser(input);
+  }
+
+  @Query(() => String)
+  login(@Arg("input") input: LoginInput, @Ctx() context: Context) {
+    return this.userService.login(input, context);
+  }
+
+  @Query(() => Boolean)
+  verifyEmail(@Arg("input") input: EmailVerifyInput) {
+    return this.userService.verifyEmail(input);
+  }
+
+  @Query(() => Boolean)
+  resendVerifyEmail(@Arg("input") input: EmailVerifyInput) {
+    return this.userService.resendVerifyEmail(input);
+  }
+
+  @Query(() => Boolean)
+  @UseMiddleware(isAuth)
+  updateSurveyStatus(@Ctx() context: Context) {
+    return this.userService.updateSurveyStatus(context);
+  }
+
+  @Query(() => Boolean)
+  @UseMiddleware(isAuth)
+  updateProfileStatus(@Ctx() context: Context) {
+    return this.userService.updateProfileStatus(context);
+  }
+
+  @Query(() => User)
+  @UseMiddleware(isAuth)
+  async user(@Ctx() context: Context) {
+    if (context.role === "employee" || context.role === "employer") {
+      const user = await getUserById(context.user!);
+      return user;
+    } else {
+      throw new ApolloError("Invalid User!");
     }
-
-    @Mutation(() => User)
-    register(@Arg('input') input: RegisterInput) {
-        return this.userService.createUser(input)
-    }
-
-    @Query(() => String)
-    login(@Arg('input') input: LoginInput, @Ctx() context: Context) {
-        return this.userService.login(input, context)
-    }
-
-    @Query(() => Boolean)
-    verifyEmail(@Arg('input') input: EmailVerifyInput, @Ctx() context: Context) {
-        return this.userService.verifyEmail(input, context)
-    }
-
-    @Query(() => Boolean)
-    @UseMiddleware(isAuth)
-    updateSurveyStatus(@Ctx() context: Context) {
-        return this.userService.updateSurveyStatus(context)
-    }
-
-    @Query(() => Boolean)
-    @UseMiddleware(isAuth)
-    updateProfileStatus(@Ctx() context: Context) {
-        return this.userService.updateProfileStatus(context)
-    }
-
-    @Query(() => User)
-    @UseMiddleware(isAuth)
-    async user(@Ctx() context: Context) {
-        if (context.role === "employee" || context.role === "employer") {
-            const user = await getUserById(context.user!)
-            return user
-        } else {
-            throw new ApolloError("Invalid User!")
-        }
-
-    }
+  }
 }
