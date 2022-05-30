@@ -70,9 +70,9 @@ class UserService {
     context.res.cookie("accessToken", token, {
       maxAge: 3.154e10,
       httpOnly: true,
-      domain: "localhost",
-      path: "/",
-      sameSite: "strict",
+      // domain: "localhost",
+      // path: "/",
+      sameSite: "none",
       secure: process.env.NODE_ENV === "production",
     });
 
