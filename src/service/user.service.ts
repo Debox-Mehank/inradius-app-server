@@ -81,12 +81,10 @@ class UserService {
       context.res.cookie("accessToken", token, {
         maxAge: 3.154e10,
         httpOnly: true,
-        // maxAge: 3.154e10,
-        // httpOnly: true,
-        // sameSite: "none",
-        // secure: true,
-        // domain: "dev.inradius.in",
-        // path: "/",
+        sameSite: "none",
+        secure: true,
+        domain: "fierce-crag-46127.herokuapp.com",
+        path: "/",
       });
     } else {
       context.res.cookie("accessToken", token, {
