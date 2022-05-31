@@ -1,18 +1,15 @@
-import { getModelForClass, index, plugin, prop } from "@typegoose/typegoose";
-import mongooseAutoPopulate from "mongoose-autopopulate";
+import { getModelForClass, index, prop } from "@typegoose/typegoose";
 import { Field, ID, InputType, ObjectType } from "type-graphql";
-import { SubDomain } from "./domain.schema";
 
-@plugin(mongooseAutoPopulate)
-@index({ skill: 1 })
+@index({ industry: 1 })
 @ObjectType()
-export class Skill {
+export class Benefit {
   @Field(() => ID)
   _id: string;
 
   @Field(() => String, { nullable: false })
   @prop({ required: true, trim: true })
-  skill: string;
+  benefit: string;
 
   @Field(() => Date)
   @prop()
@@ -23,12 +20,12 @@ export class Skill {
   updatedAt: Date;
 }
 
-export const SkillModel = getModelForClass(Skill, {
+export const BenefitModel = getModelForClass(Benefit, {
   schemaOptions: { timestamps: true },
 });
 
 @InputType()
-export class SkillInput {
+export class BenefitInput {
   @Field(() => String, { nullable: false })
-  skill: string;
+  benefit: string;
 }

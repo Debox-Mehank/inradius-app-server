@@ -2,7 +2,10 @@ import { ApolloError } from "apollo-server";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { EmployeeModel } from "../schema/employee.schema";
-import { EmployerModel } from "../schema/employer.schema";
+import {
+  EmployerModel,
+  EmployerVerifyStatusEnum,
+} from "../schema/employer.schema";
 import { EmployerJobModel } from "../schema/employer_jobs.schema";
 import {
   EmailVerifyInput,
@@ -12,7 +15,7 @@ import {
   UserRole,
 } from "../schema/user.schema";
 import Context from "../types/context";
-import { getUserByEmail, getUserById } from "../utils/helper";
+import { getUserByEmail, getUserById, getUserByNumber } from "../utils/helper";
 import {
   signJwt,
   VerificationTokenType,
@@ -25,11 +28,18 @@ class UserService {
   async createUser(input: RegisterInput) {
     // Call user model to create user
     try {
-      const checkUser = await getUserByEmail(input.email);
+      const checkUserEmail = await getUserByEmail(input.email);
 
-      if (checkUser) {
+      if (checkUserEmail) {
         throw new ApolloError("User with email already exist!");
       }
+
+      const checkUserNumber = await getUserByNumber(input.number);
+
+      if (checkUserNumber) {
+        throw new ApolloError("User with phone number already exist!");
+      }
+
       const user = await UserModel.create(input);
       // Send verification email
       await sendUserVerificationEmail({
@@ -67,16 +77,30 @@ class UserService {
     const token = signJwt({ role: user.type, user: user._id });
 
     // create cookie
-    context.res.cookie("accessToken", token, {
-      maxAge: 3.154e10,
+    if (process.env.NODE_ENV === "production") {
+      context.res.cookie("accessToken", token, {
+        maxAge: 3.154e10,
+        httpOnly: true,
+        sameSite: "none",
+        secure: false,
+      });
+    } else {
+      context.res.cookie("accessToken", token, {
+        maxAge: 3.154e10,
+        httpOnly: true,
+      });
+    }
+
+    return true;
+  }
+
+  logout(context: Context) {
+    context.res.cookie("accessToken", "", {
       httpOnly: true,
-      // domain: "localhost",
-      // path: "/",
-      sameSite: "none",
-      secure: process.env.NODE_ENV === "production",
+      expires: new Date(0),
     });
 
-    return token;
+    return true;
   }
 
   async verifyEmail(input: EmailVerifyInput) {
@@ -101,7 +125,11 @@ class UserService {
       EmployeeModel.create({ user: user._id });
     } else if (user.type === UserRole.employer) {
       const job = await EmployerJobModel.create({ user: user._id });
-      EmployerModel.create({ user: user._id, jobs: [job._id] });
+      EmployerModel.create({
+        user: user._id,
+        jobs: [job._id],
+        employerVerifyStatus: EmployerVerifyStatusEnum.DocumentsPending,
+      });
     } else {
       console.log("here1");
       throw new ApolloError("Something went wrong!");

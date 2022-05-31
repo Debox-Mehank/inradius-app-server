@@ -6,11 +6,15 @@ import {
   Resolver,
   UseMiddleware,
 } from "type-graphql";
-import { Employer, UpdateEmployerInput } from "../schema/employer.schema";
+import {
+  Employer,
+  UpdateEmployerInput,
+  UpdateEmployerVerifyInput,
+} from "../schema/employer.schema";
 import { EmployerJob, EmployerJobInput } from "../schema/employer_jobs.schema";
 import EmployerService from "../service/employer.service";
 import Context from "../types/context";
-import { isAuth } from "../utils/permissions";
+import { isAdmin, isAuth } from "../utils/permissions";
 
 @Resolver()
 export default class EmployerResolver {
@@ -22,6 +26,12 @@ export default class EmployerResolver {
   @UseMiddleware([isAuth])
   getEmployer(@Ctx() context: Context) {
     return this.service.getEmployer(context);
+  }
+
+  @Query(() => Boolean)
+  @UseMiddleware([isAuth, isAdmin])
+  verifyEmployer(@Arg("input") input: UpdateEmployerVerifyInput) {
+    return this.service.verifyEmployer(input);
   }
 
   @Mutation(() => Employer)
@@ -40,5 +50,11 @@ export default class EmployerResolver {
     @Ctx() context: Context
   ) {
     return this.service.updateEmployerJob(input, context);
+  }
+
+  @Mutation(() => Employer)
+  @UseMiddleware([isAuth])
+  addEmployerJob(@Ctx() context: Context) {
+    return this.service.addEmployerJob(context);
   }
 }

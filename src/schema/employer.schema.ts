@@ -16,16 +16,16 @@ import {
 import { EmployerJob } from "./employer_jobs.schema";
 import { UserSurvey, UserSurveyInput } from "./common/user_survey.schema";
 import { User } from "./user.schema";
+import { Benefit } from "./masters/benefit.schema";
 
-export enum EmployerGenderEnum {
-  Male = "Male",
-  Female = "Female",
-  Other = "Other",
+export enum EmployerVerifyStatusEnum {
+  "DocumentsPending" = "DocumentsPending",
+  "DocumentsUploaded" = "DocumentsUploaded",
 }
 
-registerEnumType(EmployerGenderEnum, {
-  name: "EmployerGenderEnum",
-  description: "Enum For Gender of Employer",
+registerEnumType(EmployerVerifyStatusEnum, {
+  name: "EmployerVerifyStatusEnum",
+  description: "Enum for steps of employer profile verification",
 });
 
 @plugin(mongooseAutoPopulate)
@@ -44,6 +44,10 @@ export class Employer {
 
   @Field(() => String, { nullable: true })
   @prop({ default: null })
+  companyImage: string;
+
+  @Field(() => String, { nullable: true })
+  @prop({ default: null })
   companyLetterHead: string;
 
   @Field(() => [UserSurvey])
@@ -54,8 +58,16 @@ export class Employer {
   @prop({ default: false })
   employerVerified: boolean;
 
+  @Field(() => EmployerVerifyStatusEnum, { nullable: true })
+  @prop({ default: false })
+  employerVerifyStatus: EmployerVerifyStatusEnum;
+
+  @Field(() => [Benefit], { nullable: true })
+  @prop({ ref: () => Benefit, default: [], autopopulate: true })
+  benefits: Ref<Benefit>[];
+
   @Field(() => [EmployerJob], { nullable: true })
-  @prop({ ref: () => EmployerJob, default: [] })
+  @prop({ ref: () => EmployerJob, default: [], autopopulate: true })
   jobs: Ref<EmployerJob>[];
 
   @Field(() => String, { nullable: true })
@@ -100,7 +112,7 @@ export class Employer {
 
   @Field(() => Number, { nullable: true })
   @prop({ default: null })
-  attentionRate: number;
+  attritionRate: number;
 
   @Field(() => [User])
   @prop({ ref: () => User, autopopulate: true })
@@ -125,13 +137,19 @@ export class UpdateEmployerInput {
   companyName?: string;
 
   @Field(() => String, { nullable: true })
+  companyImage: string;
+
+  @Field(() => String, { nullable: true })
   companyLetterHead?: string;
 
   @Field(() => [UserSurveyInput], { nullable: true })
   userSurvey?: UserSurveyInput[];
 
-  @Field(() => Boolean, { nullable: true })
-  employerVerified: boolean;
+  @Field(() => EmployerVerifyStatusEnum, { nullable: true })
+  employerVerifyStatus?: EmployerVerifyStatusEnum;
+
+  @Field(() => [ID], { nullable: true })
+  benefits?: string[];
 
   @Field(() => String, { nullable: true })
   linkedIn: string;
@@ -164,5 +182,14 @@ export class UpdateEmployerInput {
   noOfHiring: number;
 
   @Field(() => Number, { nullable: true })
-  attentionRate: number;
+  attritionRate: number;
+}
+
+@InputType()
+export class UpdateEmployerVerifyInput {
+  @Field(() => ID, { nullable: false })
+  _id: string;
+
+  @Field(() => Boolean, { nullable: false })
+  employerVerified: Boolean;
 }

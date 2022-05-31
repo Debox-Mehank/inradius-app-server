@@ -29,9 +29,15 @@ export default class UserResolver {
     return this.userService.createUser(input);
   }
 
-  @Query(() => String)
+  @Query(() => Boolean)
   login(@Arg("input") input: LoginInput, @Ctx() context: Context) {
     return this.userService.login(input, context);
+  }
+
+  @Query(() => Boolean)
+  @UseMiddleware(isAuth)
+  logout(@Ctx() context: Context) {
+    return this.userService.logout(context);
   }
 
   @Query(() => Boolean)

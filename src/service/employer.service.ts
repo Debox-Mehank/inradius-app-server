@@ -3,6 +3,7 @@ import {
   Employer,
   EmployerModel,
   UpdateEmployerInput,
+  UpdateEmployerVerifyInput,
 } from "../schema/employer.schema";
 import {
   EmployerJob,
@@ -12,6 +13,20 @@ import {
 import Context from "../types/context";
 
 class EmployerService {
+  async verifyEmployer(input: UpdateEmployerVerifyInput) {
+    try {
+      await EmployerModel.findOneAndUpdate(
+        { _id: input._id },
+        { $set: { employerVerified: input.employerVerified } },
+        { new: true }
+      );
+      return true;
+    } catch (error) {
+      console.log("Error in getting employer details : " + error);
+      throw new ApolloError("Error in getting employer details!");
+    }
+  }
+
   async getEmployer(context: Context) {
     try {
       return EmployerModel.findOne({ user: context.user });
@@ -38,7 +53,7 @@ class EmployerService {
   }
 
   async updateEmployerJob(input: EmployerJobInput, context: Context) {
-    // Update Employer Details
+    // Update Employer Job Details
     try {
       return EmployerJobModel.findOneAndUpdate<EmployerJob>(
         { user: context.user, _id: input._id },
@@ -53,22 +68,23 @@ class EmployerService {
     }
   }
 
-  // TODO:Implement Add Job Part
-  //   async addEmployerJob(input: EmployerJobInput, context: Context) {
-  //     // Update Employer Details
-  //     try {
-  //       return EmployerJobModel.findOneAndUpdate<EmployerJob>(
-  //         { user: context.user, _id: input._id },
-  //         {
-  //           $set: input,
-  //         },
-  //         { new: true }
-  //       );
-  //     } catch (error) {
-  //       console.log("Error in updating employer job details : " + error);
-  //       throw new ApolloError("Error in updating employer job details!");
-  //     }
-  //   }
+  async addEmployerJob(context: Context) {
+    try {
+      // Create new employer job
+      const job = await EmployerJobModel.create({ user: context.user });
+      // Update Employer Details
+      return EmployerModel.findOneAndUpdate<Employer>(
+        { user: context.user },
+        {
+          $push: { jobs: job._id },
+        },
+        { new: true }
+      );
+    } catch (error) {
+      console.log("Error in adding employer job : " + error);
+      throw new ApolloError("Error in adding employer job");
+    }
+  }
 }
 
 export default EmployerService;

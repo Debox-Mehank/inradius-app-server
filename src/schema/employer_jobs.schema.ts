@@ -1,13 +1,43 @@
 import { getModelForClass, plugin, prop, Ref } from "@typegoose/typegoose";
 import mongooseAutoPopulate from "mongoose-autopopulate";
-import { Field, ID, InputType, ObjectType } from "type-graphql";
+import {
+  Field,
+  ID,
+  InputType,
+  ObjectType,
+  registerEnumType,
+} from "type-graphql";
 import { Domain, SubDomain } from "./masters/domain.schema";
 import { Industry } from "./masters/industry.schema";
 import { Location } from "./masters/location.schema";
 import { Qualification } from "./masters/qualification.schema";
 import { Skill } from "./masters/skills.schema";
-import { UserExpInYearMonths } from "./common/user_exp.schema";
+import {
+  UserExpInYearMonths,
+  UserExpInYearMonthsInput,
+} from "./common/user_exp.schema";
 import { User } from "./user.schema";
+
+export enum EmployerJobTypeEnum {
+  "Fulltime" = "Fulltime",
+  "Contract" = "Contract",
+  "Project" = "Project",
+}
+
+export enum EmployerJobStatusEnum {
+  "Open" = "Open",
+  "Closed" = "Closed",
+}
+
+registerEnumType(EmployerJobTypeEnum, {
+  name: "EmployerJobTypeEnum",
+  description: "Enum For Type of job like fulltime, part-time, contract, etc.",
+});
+
+registerEnumType(EmployerJobStatusEnum, {
+  name: "EmployerJobStatusEnum",
+  description: "Enum For status of job like open or closed",
+});
 
 @plugin(mongooseAutoPopulate)
 @ObjectType()
@@ -18,6 +48,18 @@ export class EmployerJob {
   @Field(() => User)
   @prop({ ref: () => User, autopopulate: true })
   user: Ref<User>;
+
+  @Field(() => EmployerJobTypeEnum, { nullable: true })
+  @prop({ default: null })
+  jobType: EmployerJobTypeEnum;
+
+  @Field(() => EmployerJobStatusEnum, { nullable: true })
+  @prop({ default: null })
+  jobStatus: EmployerJobStatusEnum;
+
+  @Field(() => Boolean, { nullable: true })
+  @prop({ default: false })
+  listingComplete: boolean;
 
   @Field(() => Number, { nullable: true })
   @prop({ default: null })
@@ -89,6 +131,15 @@ export class EmployerJobInput {
   @Field(() => ID, { nullable: true })
   _id?: string;
 
+  @Field(() => EmployerJobTypeEnum, { nullable: true })
+  jobType?: EmployerJobTypeEnum;
+
+  @Field(() => EmployerJobStatusEnum, { nullable: true })
+  jobStatus?: EmployerJobStatusEnum;
+
+  @Field(() => Boolean, { nullable: true })
+  listingComplete?: boolean;
+
   @Field(() => Number, { nullable: true })
   radius?: number;
 
@@ -116,11 +167,11 @@ export class EmployerJobInput {
   @Field(() => [ID], { nullable: true })
   skills?: string[];
 
-  @Field(() => UserExpInYearMonths, { nullable: true })
-  totalExp?: UserExpInYearMonths;
+  @Field(() => UserExpInYearMonthsInput, { nullable: true })
+  totalExp?: UserExpInYearMonthsInput;
 
-  @Field(() => UserExpInYearMonths, { nullable: true })
-  relevantExp?: UserExpInYearMonths;
+  @Field(() => UserExpInYearMonthsInput, { nullable: true })
+  relevantExp?: UserExpInYearMonthsInput;
 
   @Field(() => Number, { nullable: true })
   minPay?: number;

@@ -1,4 +1,5 @@
 import { Arg, Mutation, Query, Resolver, UseMiddleware } from "type-graphql";
+import { Benefit, BenefitInput } from "../schema/masters/benefit.schema";
 import {
   Domain,
   DomainInput,
@@ -68,6 +69,12 @@ export default class MastersResolver {
     return this.service.addSurvey(input);
   }
 
+  @Mutation(() => Benefit)
+  @UseMiddleware([isAuth, isAdmin])
+  addBenefit(@Arg("input") input: BenefitInput) {
+    return this.service.addBenefit(input);
+  }
+
   @Query(() => [Location])
   @UseMiddleware([isAuth])
   allLocations() {
@@ -110,5 +117,11 @@ export default class MastersResolver {
     @Arg("type", () => SurveyType, { nullable: true }) type: SurveyType
   ) {
     return this.service.allSurveyQuestion(type);
+  }
+
+  @Query(() => [Benefit])
+  @UseMiddleware([isAuth])
+  allBenefits() {
+    return this.service.allBenefits();
   }
 }
