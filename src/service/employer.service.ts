@@ -36,6 +36,24 @@ class EmployerService {
     }
   }
 
+  async getEmployerAllJobs(context: Context) {
+    try {
+      return EmployerJobModel.find({ user: context.user });
+    } catch (error) {
+      console.log("Error in getting employer jobs : " + error);
+      throw new ApolloError("Error in getting employer jobs!");
+    }
+  }
+
+  async getJobDetails(jobId: string, context: Context) {
+    try {
+      return EmployerJobModel.findOne({ user: context.user, _id: jobId });
+    } catch (error) {
+      console.log("Error in getting job details : " + error);
+      throw new ApolloError("Error in getting job details!");
+    }
+  }
+
   async updateEmployer(input: UpdateEmployerInput, context: Context) {
     // Update Employer Details
     try {

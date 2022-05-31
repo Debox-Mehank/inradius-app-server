@@ -28,6 +28,21 @@ export default class EmployerResolver {
     return this.service.getEmployer(context);
   }
 
+  @Query(() => [EmployerJob])
+  @UseMiddleware([isAuth])
+  getEmployerAllJobs(@Ctx() context: Context) {
+    return this.service.getEmployerAllJobs(context);
+  }
+
+  @Query(() => [EmployerJob])
+  @UseMiddleware([isAuth])
+  getJobDetails(
+    @Arg("jobId", () => String, { nullable: false }) jobId: string,
+    @Ctx() context: Context
+  ) {
+    return this.service.getJobDetails(jobId, context);
+  }
+
   @Query(() => Boolean)
   @UseMiddleware([isAuth, isAdmin])
   verifyEmployer(@Arg("input") input: UpdateEmployerVerifyInput) {

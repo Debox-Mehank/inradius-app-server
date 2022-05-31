@@ -99,11 +99,7 @@ export class EmployerJob {
 
   @Field(() => UserExpInYearMonths, { nullable: true })
   @prop({ type: UserExpInYearMonths, default: null })
-  totalExp: UserExpInYearMonths;
-
-  @Field(() => UserExpInYearMonths, { nullable: true })
-  @prop({ type: UserExpInYearMonths, default: null })
-  relevantExp: UserExpInYearMonths;
+  minRequiredExp: UserExpInYearMonths;
 
   @Field(() => Number, { nullable: true })
   @prop({ default: null })
@@ -129,7 +125,7 @@ export const EmployerJobModel = getModelForClass(EmployerJob, {
 @InputType()
 export class EmployerJobInput {
   @Field(() => ID, { nullable: true })
-  _id?: string;
+  _id: string;
 
   @Field(() => EmployerJobTypeEnum, { nullable: true })
   jobType?: EmployerJobTypeEnum;
@@ -168,10 +164,7 @@ export class EmployerJobInput {
   skills?: string[];
 
   @Field(() => UserExpInYearMonthsInput, { nullable: true })
-  totalExp?: UserExpInYearMonthsInput;
-
-  @Field(() => UserExpInYearMonthsInput, { nullable: true })
-  relevantExp?: UserExpInYearMonthsInput;
+  minRequiredExp?: UserExpInYearMonthsInput;
 
   @Field(() => Number, { nullable: true })
   minPay?: number;
