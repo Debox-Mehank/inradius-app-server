@@ -83,6 +83,8 @@ class UserService {
         httpOnly: true,
         sameSite: "none",
         secure: true,
+        domain: "dev.inradius.in",
+        path: "/",
       });
     } else {
       context.res.cookie("accessToken", token, {
