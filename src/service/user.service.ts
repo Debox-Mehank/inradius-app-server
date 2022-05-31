@@ -81,10 +81,12 @@ class UserService {
       context.res.cookie("accessToken", token, {
         maxAge: 3.154e10,
         httpOnly: true,
-        sameSite: "none",
-        secure: true,
-        domain: "dev.inradius.in",
-        path: "/",
+        // maxAge: 3.154e10,
+        // httpOnly: true,
+        // sameSite: "none",
+        // secure: true,
+        // domain: "dev.inradius.in",
+        // path: "/",
       });
     } else {
       context.res.cookie("accessToken", token, {
