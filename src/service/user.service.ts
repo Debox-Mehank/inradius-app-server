@@ -82,7 +82,7 @@ class UserService {
         maxAge: 3.154e10,
         httpOnly: true,
         sameSite: "none",
-        secure: false,
+        secure: true,
       });
     } else {
       context.res.cookie("accessToken", token, {
