@@ -19,6 +19,9 @@ export class DashboardEmployee {
 
   @Field(() => String, { nullable: false })
   domain: string;
+
+  @Field(() => Number, { nullable: false })
+  score: number;
 }
 
 @ObjectType()
@@ -46,4 +49,7 @@ export class DashboardEmployer {
 
   @Field(() => String, { nullable: false })
   domain: string;
+
+  @Field(() => Number, { nullable: false })
+  score: number;
 }

@@ -1,4 +1,4 @@
-import { Ctx, Query, Resolver, UseMiddleware } from "type-graphql";
+import { Arg, Ctx, Query, Resolver, UseMiddleware } from "type-graphql";
 import {
   DashboardEmployee,
   DashboardEmployer,
@@ -24,7 +24,14 @@ export default class DashboardResolver {
 
   @Query(() => [DashboardEmployee])
   @UseMiddleware([isAuth])
-  employerExplore(@Ctx() context: Context): DashboardEmployee[] {
-    return [];
+  async employerExplore(
+    @Arg("jobId") jobId: String,
+    @Ctx() context: Context
+  ): Promise<DashboardEmployee[]> {
+    const data: DashboardEmployee[] = await this.service.employerExplore(
+      jobId,
+      context
+    );
+    return data;
   }
 }
