@@ -80,6 +80,16 @@ class MastersService {
     }
   }
 
+  async addSkills(input: SkillInput[]) {
+    try {
+      await SkillModel.insertMany(input);
+      return true;
+    } catch (error) {
+      console.log("Skill Adding ERROR : " + error);
+      throw new ApolloError("Error in adding skill!");
+    }
+  }
+
   async addSurvey(input: SurveyInput) {
     try {
       return SurveyModel.create(input);

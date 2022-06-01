@@ -63,6 +63,12 @@ export default class MastersResolver {
     return this.service.addSkill(input);
   }
 
+  @Mutation(() => Boolean)
+  @UseMiddleware([isAuth, isAdmin])
+  addSkills(@Arg("input", () => [SkillInput]) input: [SkillInput]) {
+    return this.service.addSkills(input);
+  }
+
   @Mutation(() => Survey)
   @UseMiddleware([isAuth, isAdmin])
   addSurvey(@Arg("input") input: SurveyInput) {

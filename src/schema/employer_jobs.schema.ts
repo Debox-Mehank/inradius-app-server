@@ -53,6 +53,10 @@ export class EmployerJob {
   @prop({ default: null })
   jobTitle: string;
 
+  @Field(() => String, { nullable: true })
+  @prop({ default: null })
+  jobDesc: string;
+
   @Field(() => EmployerJobTypeEnum, { nullable: true })
   @prop({ default: null })
   jobType: EmployerJobTypeEnum;
@@ -133,6 +137,9 @@ export class EmployerJobInput {
 
   @Field(() => String, { nullable: true })
   jobTitle?: string;
+
+  @Field(() => String, { nullable: true })
+  jobDesc?: string;
 
   @Field(() => EmployerJobTypeEnum, { nullable: true })
   jobType?: EmployerJobTypeEnum;

@@ -52,6 +52,14 @@ export class Admin {
   @Field(() => AdminRole, { nullable: false })
   @prop({ required: true })
   type: AdminRole;
+
+  @Field(() => Date)
+  @prop()
+  createdAt: Date;
+
+  @Field(() => Date)
+  @prop()
+  updatedAt: Date;
 }
 
 export const AdminModel = getModelForClass(Admin, {
@@ -72,14 +80,6 @@ export class AdminRegisterInput {
 
   @Field(() => AdminRole)
   type: AdminRole;
-
-  @Field(() => Date)
-  @prop()
-  createdAt: Date;
-
-  @Field(() => Date)
-  @prop()
-  updatedAt: Date;
 }
 
 @InputType()
