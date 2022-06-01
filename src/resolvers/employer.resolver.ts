@@ -34,7 +34,7 @@ export default class EmployerResolver {
     return this.service.getEmployerAllJobs(context);
   }
 
-  @Query(() => [EmployerJob])
+  @Query(() => EmployerJob)
   @UseMiddleware([isAuth])
   getJobDetails(
     @Arg("jobId", () => String, { nullable: false }) jobId: string,
@@ -67,7 +67,7 @@ export default class EmployerResolver {
     return this.service.updateEmployerJob(input, context);
   }
 
-  @Mutation(() => Employer)
+  @Mutation(() => String)
   @UseMiddleware([isAuth])
   addEmployerJob(@Ctx() context: Context) {
     return this.service.addEmployerJob(context);

@@ -6,7 +6,10 @@ import {
   EmployerModel,
   EmployerVerifyStatusEnum,
 } from "../schema/employer.schema";
-import { EmployerJobModel } from "../schema/employer_jobs.schema";
+import {
+  EmployerJobModel,
+  EmployerJobStatusEnum,
+} from "../schema/employer_jobs.schema";
 import {
   EmailVerifyInput,
   LoginInput,
@@ -126,7 +129,10 @@ class UserService {
     if (user.type === UserRole.employee) {
       EmployeeModel.create({ user: user._id });
     } else if (user.type === UserRole.employer) {
-      const job = await EmployerJobModel.create({ user: user._id });
+      const job = await EmployerJobModel.create({
+        user: user._id,
+        jobStatus: EmployerJobStatusEnum.Closed,
+      });
       EmployerModel.create({
         user: user._id,
         jobs: [job._id],

@@ -49,6 +49,10 @@ export class EmployerJob {
   @prop({ ref: () => User, autopopulate: true })
   user: Ref<User>;
 
+  @Field(() => String, { nullable: true })
+  @prop({ default: null })
+  jobTitle: string;
+
   @Field(() => EmployerJobTypeEnum, { nullable: true })
   @prop({ default: null })
   jobType: EmployerJobTypeEnum;
@@ -126,6 +130,9 @@ export const EmployerJobModel = getModelForClass(EmployerJob, {
 export class EmployerJobInput {
   @Field(() => ID, { nullable: true })
   _id: string;
+
+  @Field(() => String, { nullable: true })
+  jobTitle?: string;
 
   @Field(() => EmployerJobTypeEnum, { nullable: true })
   jobType?: EmployerJobTypeEnum;

@@ -9,6 +9,7 @@ import {
   EmployerJob,
   EmployerJobInput,
   EmployerJobModel,
+  EmployerJobStatusEnum,
 } from "../schema/employer_jobs.schema";
 import Context from "../types/context";
 
@@ -89,15 +90,20 @@ class EmployerService {
   async addEmployerJob(context: Context) {
     try {
       // Create new employer job
-      const job = await EmployerJobModel.create({ user: context.user });
+      const job = await EmployerJobModel.create({
+        user: context.user,
+        jobStatus: EmployerJobStatusEnum.Closed,
+      });
       // Update Employer Details
-      return EmployerModel.findOneAndUpdate<Employer>(
+      await EmployerModel.findOneAndUpdate<Employer>(
         { user: context.user },
         {
           $push: { jobs: job._id },
         },
         { new: true }
       );
+
+      return job._id;
     } catch (error) {
       console.log("Error in adding employer job : " + error);
       throw new ApolloError("Error in adding employer job");
