@@ -8,7 +8,7 @@ export class DashboardEmployee {
   @Field(() => String, { nullable: false })
   lastName: string;
 
-  @Field(() => String, { nullable: false })
+  @Field(() => String, { nullable: true })
   image: string;
 
   @Field(() => String, { nullable: false })
