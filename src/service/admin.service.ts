@@ -57,6 +57,26 @@ class AdminService {
 
     return token;
   }
+
+  logoutAdmin(context: Context) {
+    if (process.env.NODE_ENV === "production") {
+      context.res.cookie("accessToken", "", {
+        httpOnly: true,
+        sameSite: "none",
+        secure: true,
+        domain: "fierce-crag-46127.herokuapp.com",
+        path: "/",
+        expires: new Date(0),
+      });
+    } else {
+      context.res.cookie("accessToken", "", {
+        httpOnly: true,
+        expires: new Date(0),
+      });
+    }
+
+    return true;
+  }
 }
 
 export default AdminService;
