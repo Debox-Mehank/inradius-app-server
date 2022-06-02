@@ -100,10 +100,22 @@ class UserService {
   }
 
   logout(context: Context) {
-    context.res.cookie("accessToken", "", {
-      httpOnly: true,
-      expires: new Date(0),
-    });
+    if (process.env.NODE_ENV === "production") {
+      context.res.cookie("accessToken", "", {
+        httpOnly: true,
+        sameSite: "none",
+        secure: true,
+        domain: "fierce-crag-46127.herokuapp.com",
+        path: "/",
+        expires: new Date(0),
+      });
+    } else {
+      context.res.cookie("accessToken", "", {
+        maxAge: 3.154e10,
+        httpOnly: true,
+        expires: new Date(0),
+      });
+    }
 
     return true;
   }
