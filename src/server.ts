@@ -53,6 +53,7 @@ async function bootstrap() {
         "http://localhost:3000",
         "https://inradius.in",
         "https://dev.inradius.in",
+        "https://admin.inradius.in",
       ],
     },
   });
