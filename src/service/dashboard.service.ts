@@ -35,6 +35,18 @@ class DashboardService {
       employerVerified: true,
     });
 
+    // isPointWithinRadius(
+    //   {
+    //     latitude: employee.latitude,
+    //     longitude: employee.longitude,
+    //   },
+    //   {
+    //     latitude: job.latitude,
+    //     longitude: job.longitude,
+    //   },
+    //   job.radius
+    // );
+
     // Matching Part
     for (let index = 0; index < allEmployers.length; index++) {
       const employer = allEmployers[index];
@@ -68,7 +80,16 @@ class DashboardService {
                       employee.location._id.toString() &&
                     job.industry._id.toString() ===
                       employee.industry._id.toString() &&
-                    job.domain._id.toString() === employee.domain._id.toString()
+                    job.domain._id.toString() ===
+                      employee.domain._id.toString() &&
+                    isPointWithinRadius(
+                      { latitude: job.latitude, longitude: job.longitude },
+                      {
+                        latitude: employee.latitude,
+                        longitude: employee.longitude,
+                      },
+                      employee.radius * 1000
+                    )
                   ) {
                     const skillsMatched = _.intersection(
                       job.skills.slice(0, 4).map((el) => el._id.toString()),
@@ -154,92 +175,112 @@ class DashboardService {
 
     const allEmployees = await EmployeeModel.find({});
 
-    // Matching Part
-    for (let index = 0; index < allEmployees.length; index++) {
-      const employee = allEmployees[index];
-      if (isDocument(employee.user)) {
-        if (
-          employee.user.isAccountVerified &&
-          employee.user.isProfileCompleted &&
-          employee.user.isSurveyCompleted
-        ) {
-          if (isDocument(job)) {
-            if (
-              job.listingComplete &&
-              job.jobStatus === EmployerJobStatusEnum.Open
-            ) {
+    try {
+      // Matching Part
+      for (let index = 0; index < allEmployees.length; index++) {
+        const employee = allEmployees[index];
+        if (isDocument(employee.user)) {
+          if (
+            employee.user.isAccountVerified &&
+            employee.user.isProfileCompleted &&
+            employee.user.isSurveyCompleted
+          ) {
+            if (isDocument(job)) {
               if (
-                isDocument(job.location) &&
-                isDocument(job.industry) &&
-                isDocument(job.domain) &&
-                isDocument(job.subDomain) &&
-                isDocumentArray(job.skills) &&
-                isDocument(employee.location) &&
-                isDocument(employee.industry) &&
-                isDocument(employee.domain) &&
-                isDocument(employee.subDomain) &&
-                isDocumentArray(employee.skills)
+                job.listingComplete &&
+                job.jobStatus === EmployerJobStatusEnum.Open
               ) {
                 if (
-                  job.location._id.toString() ===
-                    employee.location._id.toString() &&
-                  job.industry._id.toString() ===
-                    employee.industry._id.toString() &&
-                  job.domain._id.toString() === employee.domain._id.toString()
+                  isDocument(job.location) &&
+                  isDocument(job.industry) &&
+                  isDocument(job.domain) &&
+                  isDocument(job.subDomain) &&
+                  isDocumentArray(job.skills) &&
+                  isDocument(employee.location) &&
+                  isDocument(employee.industry) &&
+                  isDocument(employee.domain) &&
+                  isDocument(employee.subDomain) &&
+                  isDocumentArray(employee.skills)
                 ) {
-                  const skillsMatched = _.intersection(
-                    job.skills.slice(0, 4).map((el) => el._id.toString()),
-                    employee.skills.slice(0, 4).map((el) => el._id.toString())
-                  ).length;
+                  //   console.log(
+                  //     `Employee Lat : ${employee.latitude} Employee Lng : ${employee.longitude} Employee Name: ${employee.user.firstName}`
+                  //   );
+                  if (
+                    job.location._id.toString() ===
+                      employee.location._id.toString() &&
+                    job.industry._id.toString() ===
+                      employee.industry._id.toString() &&
+                    job.domain._id.toString() ===
+                      employee.domain._id.toString() &&
+                    isPointWithinRadius(
+                      {
+                        latitude: employee.latitude ?? 0,
+                        longitude: employee.longitude ?? 0,
+                      },
+                      {
+                        latitude: job.latitude ?? 0,
+                        longitude: job.longitude ?? 0,
+                      },
+                      job.radius * 1000
+                    )
+                  ) {
+                    const skillsMatched = _.intersection(
+                      job.skills.slice(0, 4).map((el) => el._id.toString()),
+                      employee.skills.slice(0, 4).map((el) => el._id.toString())
+                    ).length;
 
-                  const subDomainMatch =
-                    job.subDomain._id.toString() ===
-                    employee.subDomain._id.toString();
+                    const subDomainMatch =
+                      job.subDomain._id.toString() ===
+                      employee.subDomain._id.toString();
 
-                  const employeeRelevantExp = employee.fresher
-                    ? 0
-                    : parseInt(employee.relevantExp.years) * 12 +
-                      parseInt(employee.relevantExp.months);
-                  const jobMinReqExp =
-                    parseInt(job.minRequiredExp.years) * 12 +
-                    parseInt(job.minRequiredExp.months);
+                    const employeeRelevantExp = employee.fresher
+                      ? 0
+                      : parseInt(employee.relevantExp.years) * 12 +
+                        parseInt(employee.relevantExp.months);
+                    const jobMinReqExp =
+                      parseInt(job.minRequiredExp.years) * 12 +
+                      parseInt(job.minRequiredExp.months);
 
-                  var postMatchScore = 0;
+                    var postMatchScore = 0;
 
-                  if (skillsMatched > 0) {
-                    postMatchScore += SKILLS_SCORE * skillsMatched;
+                    if (skillsMatched > 0) {
+                      postMatchScore += SKILLS_SCORE * skillsMatched;
+                    }
+
+                    if (subDomainMatch) {
+                      postMatchScore += SUBDOMAIN_SCORE;
+                    }
+
+                    if (jobMinReqExp <= employeeRelevantExp) {
+                      postMatchScore += EXPERIENCE_SCORE;
+                    }
+
+                    const finalScore =
+                      BASE_SCORE * BASE_WEIGHTAGE +
+                      postMatchScore * MATCH_WEIGHTAGE;
+
+                    employerExploreArr.push({
+                      firstName: employee.user.firstName,
+                      lastName: employee.user.lastName,
+                      image: employee.user.image,
+                      domain: employee.domain.domain,
+                      industry: employee.industry.industry,
+                      location: employee.location.location,
+                      score: finalScore,
+                    });
                   }
-
-                  if (subDomainMatch) {
-                    postMatchScore += SUBDOMAIN_SCORE;
-                  }
-
-                  if (jobMinReqExp <= employeeRelevantExp) {
-                    postMatchScore += EXPERIENCE_SCORE;
-                  }
-
-                  const finalScore =
-                    BASE_SCORE * BASE_WEIGHTAGE +
-                    postMatchScore * MATCH_WEIGHTAGE;
-
-                  employerExploreArr.push({
-                    firstName: employee.user.firstName,
-                    lastName: employee.user.lastName,
-                    image: employee.user.image,
-                    domain: employee.domain.domain,
-                    industry: employee.industry.industry,
-                    location: employee.location.location,
-                    score: finalScore,
-                  });
                 }
               }
             }
           }
         }
       }
-    }
 
-    return employerExploreArr;
+      return employerExploreArr;
+    } catch (error) {
+      console.log(error);
+      return [];
+    }
   }
 }
 
