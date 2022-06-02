@@ -75,6 +75,16 @@ class DashboardService {
                   isDocument(employee.subDomain) &&
                   isDocumentArray(employee.skills)
                 ) {
+                  console.log(
+                    isPointWithinRadius(
+                      { latitude: job.latitude, longitude: job.longitude },
+                      {
+                        latitude: employee.latitude,
+                        longitude: employee.longitude,
+                      },
+                      employee.radius * 1000
+                    )
+                  );
                   if (
                     job.location._id.toString() ===
                       employee.location._id.toString() &&
@@ -89,7 +99,9 @@ class DashboardService {
                         longitude: employee.longitude,
                       },
                       employee.radius * 1000
-                    )
+                    ) &&
+                    employee.expectedPay >= job.minPay &&
+                    employee.expectedPay <= job.maxPay
                   ) {
                     const skillsMatched = _.intersection(
                       job.skills.slice(0, 4).map((el) => el._id.toString()),
@@ -222,7 +234,9 @@ class DashboardService {
                         longitude: job.longitude ?? 0,
                       },
                       job.radius * 1000
-                    )
+                    ) &&
+                    employee.expectedPay >= job.minPay &&
+                    employee.expectedPay <= job.maxPay
                   ) {
                     const skillsMatched = _.intersection(
                       job.skills.slice(0, 4).map((el) => el._id.toString()),
