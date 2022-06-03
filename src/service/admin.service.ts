@@ -6,6 +6,8 @@ import {
   Admin,
   AdminModel,
 } from "../schema/admin.schema";
+import { EmployeeModel } from "../schema/employee.schema";
+import { EmployerModel } from "../schema/employer.schema";
 import Context from "../types/context";
 import { signJwt } from "../utils/jwt";
 
@@ -76,6 +78,22 @@ class AdminService {
     }
 
     return true;
+  }
+
+  async getAllEmployees() {
+    try {
+      return await EmployeeModel.find({});
+    } catch (error) {
+      throw new ApolloError("Error in getting all employees!");
+    }
+  }
+
+  async getAllEmployers() {
+    try {
+      return await EmployerModel.find({});
+    } catch (error) {
+      throw new ApolloError("Error in getting all employers!");
+    }
   }
 }
 

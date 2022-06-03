@@ -79,9 +79,9 @@ export class Employee {
   @prop({ ref: () => Domain, autopopulate: true, default: null })
   domain: Ref<Domain>;
 
-  @Field(() => SubDomain, { nullable: true })
-  @prop({ ref: () => SubDomain, autopopulate: true, default: null })
-  subDomain: Ref<SubDomain>;
+  @Field(() => [SubDomain])
+  @prop({ ref: () => SubDomain, autopopulate: true, default: [] })
+  subDomain: Ref<SubDomain>[];
 
   @Field(() => [Skill])
   @prop({ ref: () => Skill, autopopulate: true, default: [] })
@@ -182,8 +182,8 @@ export class UpdateEmployeeInput {
   @Field(() => ID, { nullable: true })
   domain?: string;
 
-  @Field(() => ID, { nullable: true })
-  subDomain?: string;
+  @Field(() => [ID], { nullable: true })
+  subDomain?: string[];
 
   @Field(() => [ID], { nullable: true })
   skills?: string[];

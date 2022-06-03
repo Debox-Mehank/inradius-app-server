@@ -148,6 +148,9 @@ class DashboardService {
                       jobType: job.jobType,
                       location: job.location.location,
                       score: finalScore,
+                      employerId: employer._id,
+                      jobId: job._id,
+                      userId: employer.user._id,
                     });
                   }
                 }
@@ -281,6 +284,8 @@ class DashboardService {
                       industry: employee.industry.industry,
                       location: employee.location.location,
                       score: finalScore,
+                      employeeId: employee._id,
+                      userId: employee.user._id,
                     });
                   }
                 }

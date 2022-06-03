@@ -11,6 +11,8 @@ import {
   AdminLoginInput,
   Admin,
 } from "../schema/admin.schema";
+import { Employee } from "../schema/employee.schema";
+import { Employer } from "../schema/employer.schema";
 import AdminService from "../service/admin.service";
 import Context from "../types/context";
 import { isAdmin, isAuth } from "../utils/permissions";
@@ -35,5 +37,17 @@ export default class AdminResolver {
   @UseMiddleware([isAuth, isAdmin])
   adminLogout(@Ctx() context: Context) {
     return this.adminService.logoutAdmin(context);
+  }
+
+  @Query(() => [Employee])
+  @UseMiddleware([isAuth, isAdmin])
+  getAllEmployees() {
+    return this.adminService.getAllEmployees();
+  }
+
+  @Query(() => [Employer])
+  @UseMiddleware([isAuth, isAdmin])
+  getAllEmployers() {
+    return this.adminService.getAllEmployers();
   }
 }

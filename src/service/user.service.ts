@@ -203,6 +203,19 @@ class UserService {
     }
   }
 
+  async updateUserImage(image: String, context: Context) {
+    try {
+      await UserModel.updateOne(
+        { _id: context?.user ?? "" },
+        { $set: { image: image } }
+      );
+      return true;
+    } catch (error) {
+      console.log("Error In Updating User Image : " + error);
+      return false;
+    }
+  }
+
   async updateProfileStatus(context: Context) {
     try {
       await UserModel.updateOne(

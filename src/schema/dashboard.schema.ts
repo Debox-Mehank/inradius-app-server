@@ -1,4 +1,4 @@
-import { Field, ObjectType } from "type-graphql";
+import { Field, ID, ObjectType } from "type-graphql";
 
 @ObjectType()
 export class DashboardEmployee {
@@ -22,6 +22,12 @@ export class DashboardEmployee {
 
   @Field(() => Number, { nullable: false })
   score: number;
+
+  @Field(() => ID, { nullable: false })
+  employeeId: string;
+
+  @Field(() => ID, { nullable: false })
+  userId: string;
 }
 
 @ObjectType()
@@ -52,4 +58,13 @@ export class DashboardEmployer {
 
   @Field(() => Number, { nullable: false })
   score: number;
+
+  @Field(() => ID, { nullable: false })
+  employerId: string;
+
+  @Field(() => ID, { nullable: false })
+  userId: string;
+
+  @Field(() => ID, { nullable: false })
+  jobId: string;
 }

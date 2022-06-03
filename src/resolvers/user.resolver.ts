@@ -52,6 +52,12 @@ export default class UserResolver {
 
   @Query(() => Boolean)
   @UseMiddleware(isAuth)
+  updateUserImage(@Arg("image") image: String, @Ctx() context: Context) {
+    return this.userService.updateUserImage(image, context);
+  }
+
+  @Query(() => Boolean)
+  @UseMiddleware(isAuth)
   updateSurveyStatus(@Ctx() context: Context) {
     return this.userService.updateSurveyStatus(context);
   }
