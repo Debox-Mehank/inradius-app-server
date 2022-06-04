@@ -1,70 +1,35 @@
+import { plugin, prop, Ref } from "@typegoose/typegoose";
+import mongooseAutoPopulate from "mongoose-autopopulate";
 import { Field, ID, ObjectType } from "type-graphql";
+import { Employee } from "./employee.schema";
+import { Employer } from "./employer.schema";
+import { EmployerJob } from "./employer_jobs.schema";
+import { User } from "./user.schema";
 
 @ObjectType()
 export class DashboardEmployee {
-  @Field(() => String, { nullable: false })
-  firstName: string;
-
-  @Field(() => String, { nullable: false })
-  lastName: string;
-
-  @Field(() => String, { nullable: true })
-  image: string;
-
-  @Field(() => String, { nullable: false })
-  location: string;
-
-  @Field(() => String, { nullable: false })
-  industry: string;
-
-  @Field(() => String, { nullable: false })
-  domain: string;
-
   @Field(() => Number, { nullable: false })
   score: number;
 
-  @Field(() => ID, { nullable: false })
-  employeeId: string;
+  @Field(() => Employee, { nullable: false })
+  employeeId: Employee;
 
-  @Field(() => ID, { nullable: false })
-  userId: string;
+  @Field(() => User, { nullable: false })
+  userId: User;
 }
 
+@plugin(mongooseAutoPopulate)
 @ObjectType()
 export class DashboardEmployer {
-  @Field(() => String, { nullable: false })
-  companyName: string;
-
-  @Field(() => String, { nullable: false })
-  companyImage: string;
-
-  @Field(() => String, { nullable: false })
-  jobTitle: string;
-
-  @Field(() => String, { nullable: false })
-  jobDesc: string;
-
-  @Field(() => String, { nullable: false })
-  jobType: string;
-
-  @Field(() => String, { nullable: false })
-  location: string;
-
-  @Field(() => String, { nullable: false })
-  industry: string;
-
-  @Field(() => String, { nullable: false })
-  domain: string;
-
   @Field(() => Number, { nullable: false })
   score: number;
 
-  @Field(() => ID, { nullable: false })
-  employerId: string;
+  @Field(() => Employer, { nullable: false })
+  employerId: Employer;
 
-  @Field(() => ID, { nullable: false })
-  userId: string;
+  @Field(() => User, { nullable: false })
+  userId: User;
 
-  @Field(() => ID, { nullable: false })
-  jobId: string;
+  @Field(() => EmployerJob, { nullable: false })
+  jobId: EmployerJob;
 }

@@ -14,13 +14,12 @@ import _ from "lodash";
 import Context from "../types/context";
 import { isDocument, isDocumentArray } from "@typegoose/typegoose";
 
-const BASE_SCORE = 70;
-const SKILLS_SCORE = 10;
-const SUBDOMAIN_SCORE = 30;
-const EXPERIENCE_SCORE = 30;
+const TOTAL_SKILLS = 4;
+const TOTAL_SUBDOMAINS = 3;
 
-const BASE_WEIGHTAGE = 0.5;
-const MATCH_WEIGHTAGE = 0.5;
+const SKILLS_WEIGHTAGE = 0.4;
+const SUBDOMAINS_WEIGHTAGE = 0.4;
+const EXPERIENCE_WEIGHTAGE = 0.2;
 
 class DashboardService {
   async employeeExplore(context: Context): Promise<DashboardEmployer[]> {
@@ -34,18 +33,6 @@ class DashboardService {
     const allEmployers = await EmployerModel.find({
       employerVerified: true,
     });
-
-    // isPointWithinRadius(
-    //   {
-    //     latitude: employee.latitude,
-    //     longitude: employee.longitude,
-    //   },
-    //   {
-    //     latitude: job.latitude,
-    //     longitude: job.longitude,
-    //   },
-    //   job.radius
-    // );
 
     // Matching Part
     for (let index = 0; index < allEmployers.length; index++) {
@@ -67,29 +54,17 @@ class DashboardService {
                   isDocument(job.location) &&
                   isDocument(job.industry) &&
                   isDocument(job.domain) &&
-                  isDocument(job.subDomain) &&
+                  isDocumentArray(job.subDomain) &&
                   isDocumentArray(job.skills) &&
                   isDocument(employee.location) &&
                   isDocument(employee.industry) &&
                   isDocument(employee.domain) &&
-                  isDocument(employee.subDomain) &&
+                  isDocumentArray(employee.subDomain) &&
                   isDocumentArray(employee.skills)
                 ) {
-                  console.log(
-                    isPointWithinRadius(
-                      { latitude: job.latitude, longitude: job.longitude },
-                      {
-                        latitude: employee.latitude,
-                        longitude: employee.longitude,
-                      },
-                      employee.radius * 1000
-                    )
-                  );
                   if (
                     job.location._id.toString() ===
                       employee.location._id.toString() &&
-                    job.industry._id.toString() ===
-                      employee.industry._id.toString() &&
                     job.domain._id.toString() ===
                       employee.domain._id.toString() &&
                     isPointWithinRadius(
@@ -100,57 +75,50 @@ class DashboardService {
                       },
                       employee.radius * 1000
                     ) &&
-                    employee.expectedPay >= job.minPay &&
-                    employee.expectedPay <= job.maxPay
+                    ((employee.expectedPay >= job.minPay &&
+                      employee.expectedPay <= job.maxPay) ||
+                      employee.expectedPay < job.minPay)
                   ) {
+                    var defaultScore = 0;
+
                     const skillsMatched = _.intersection(
-                      job.skills.slice(0, 4).map((el) => el._id.toString()),
-                      employee.skills.slice(0, 4).map((el) => el._id.toString())
+                      job.skills.map((el) => el._id.toString()),
+                      employee.skills.map((el) => el._id.toString())
                     ).length;
 
-                    const subDomainMatch =
-                      job.subDomain._id.toString() ===
-                      employee.subDomain._id.toString();
+                    const skillsValue =
+                      (skillsMatched / TOTAL_SKILLS) * SKILLS_WEIGHTAGE * 100;
+
+                    const subDomainsMatched = _.intersection(
+                      job.subDomain.map((el) => el._id.toString()),
+                      employee.subDomain.map((el) => el._id.toString())
+                    ).length;
+
+                    const subDomainsValue =
+                      (subDomainsMatched / TOTAL_SUBDOMAINS) *
+                      SUBDOMAINS_WEIGHTAGE *
+                      100;
 
                     const employeeRelevantExp = employee.fresher
                       ? 0
                       : parseInt(employee.relevantExp.years) * 12 +
                         parseInt(employee.relevantExp.months);
+
                     const jobMinReqExp =
                       parseInt(job.minRequiredExp.years) * 12 +
                       parseInt(job.minRequiredExp.months);
 
-                    var postMatchScore = 0;
-
-                    if (skillsMatched > 0) {
-                      postMatchScore += SKILLS_SCORE * skillsMatched;
-                    }
-
-                    if (subDomainMatch) {
-                      postMatchScore += SUBDOMAIN_SCORE;
-                    }
-
                     if (jobMinReqExp <= employeeRelevantExp) {
-                      postMatchScore += EXPERIENCE_SCORE;
+                      defaultScore += EXPERIENCE_WEIGHTAGE * 100;
                     }
 
-                    const finalScore =
-                      BASE_SCORE * BASE_WEIGHTAGE +
-                      postMatchScore * MATCH_WEIGHTAGE;
+                    defaultScore += skillsValue + subDomainsValue;
 
                     employeeExploreArr.push({
-                      companyName: employer.companyName,
-                      companyImage: employer.companyImage,
-                      domain: job.domain.domain,
-                      industry: job.industry.industry,
-                      jobDesc: job.jobDesc,
-                      jobTitle: job.jobTitle,
-                      jobType: job.jobType,
-                      location: job.location.location,
-                      score: finalScore,
-                      employerId: employer._id,
-                      jobId: job._id,
-                      userId: employer.user._id,
+                      employerId: employer,
+                      jobId: job,
+                      userId: employer.user,
+                      score: defaultScore,
                     });
                   }
                 }
@@ -209,22 +177,17 @@ class DashboardService {
                   isDocument(job.location) &&
                   isDocument(job.industry) &&
                   isDocument(job.domain) &&
-                  isDocument(job.subDomain) &&
+                  isDocumentArray(job.subDomain) &&
                   isDocumentArray(job.skills) &&
                   isDocument(employee.location) &&
                   isDocument(employee.industry) &&
                   isDocument(employee.domain) &&
-                  isDocument(employee.subDomain) &&
+                  isDocumentArray(employee.subDomain) &&
                   isDocumentArray(employee.skills)
                 ) {
-                  //   console.log(
-                  //     `Employee Lat : ${employee.latitude} Employee Lng : ${employee.longitude} Employee Name: ${employee.user.firstName}`
-                  //   );
                   if (
                     job.location._id.toString() ===
                       employee.location._id.toString() &&
-                    job.industry._id.toString() ===
-                      employee.industry._id.toString() &&
                     job.domain._id.toString() ===
                       employee.domain._id.toString() &&
                     isPointWithinRadius(
@@ -238,54 +201,49 @@ class DashboardService {
                       },
                       job.radius * 1000
                     ) &&
-                    employee.expectedPay >= job.minPay &&
-                    employee.expectedPay <= job.maxPay
+                    ((employee.expectedPay >= job.minPay &&
+                      employee.expectedPay <= job.maxPay) ||
+                      employee.expectedPay < job.minPay)
                   ) {
+                    var defaultScore = 0;
+
                     const skillsMatched = _.intersection(
-                      job.skills.slice(0, 4).map((el) => el._id.toString()),
-                      employee.skills.slice(0, 4).map((el) => el._id.toString())
+                      job.skills.map((el) => el._id.toString()),
+                      employee.skills.map((el) => el._id.toString())
                     ).length;
 
-                    const subDomainMatch =
-                      job.subDomain._id.toString() ===
-                      employee.subDomain._id.toString();
+                    const skillsValue =
+                      (skillsMatched / TOTAL_SKILLS) * SKILLS_WEIGHTAGE * 100;
+
+                    const subDomainsMatched = _.intersection(
+                      job.subDomain.map((el) => el._id.toString()),
+                      employee.subDomain.map((el) => el._id.toString())
+                    ).length;
+
+                    const subDomainsValue =
+                      (subDomainsMatched / TOTAL_SUBDOMAINS) *
+                      SUBDOMAINS_WEIGHTAGE *
+                      100;
 
                     const employeeRelevantExp = employee.fresher
                       ? 0
                       : parseInt(employee.relevantExp.years) * 12 +
                         parseInt(employee.relevantExp.months);
+
                     const jobMinReqExp =
                       parseInt(job.minRequiredExp.years) * 12 +
                       parseInt(job.minRequiredExp.months);
 
-                    var postMatchScore = 0;
-
-                    if (skillsMatched > 0) {
-                      postMatchScore += SKILLS_SCORE * skillsMatched;
-                    }
-
-                    if (subDomainMatch) {
-                      postMatchScore += SUBDOMAIN_SCORE;
-                    }
-
                     if (jobMinReqExp <= employeeRelevantExp) {
-                      postMatchScore += EXPERIENCE_SCORE;
+                      defaultScore += EXPERIENCE_WEIGHTAGE * 100;
                     }
 
-                    const finalScore =
-                      BASE_SCORE * BASE_WEIGHTAGE +
-                      postMatchScore * MATCH_WEIGHTAGE;
+                    defaultScore += skillsValue + subDomainsValue;
 
                     employerExploreArr.push({
-                      firstName: employee.user.firstName,
-                      lastName: employee.user.lastName,
-                      image: employee.user.image,
-                      domain: employee.domain.domain,
-                      industry: employee.industry.industry,
-                      location: employee.location.location,
-                      score: finalScore,
-                      employeeId: employee._id,
-                      userId: employee.user._id,
+                      score: parseFloat(defaultScore.toFixed(2)),
+                      employeeId: employee,
+                      userId: employee.user,
                     });
                   }
                 }
