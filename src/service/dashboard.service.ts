@@ -21,6 +21,7 @@ const SKILLS_WEIGHTAGE = 0.4;
 const SUBDOMAINS_WEIGHTAGE = 0.4;
 const EXPERIENCE_WEIGHTAGE = 0.2;
 
+// Logics Are implemented here
 class DashboardService {
   async employeeExplore(context: Context): Promise<DashboardEmployer[]> {
     var employeeExploreArr: DashboardEmployer[] = [];
