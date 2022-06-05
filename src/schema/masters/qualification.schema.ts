@@ -11,6 +11,10 @@ export class Qualification {
   @prop({ required: true, trim: true, unique: true })
   qualification: string;
 
+  @Field(() => Boolean)
+  @prop()
+  active: boolean;
+  
   @Field(() => Date)
   @prop()
   createdAt: Date;

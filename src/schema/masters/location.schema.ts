@@ -11,6 +11,10 @@ export class Location {
   @prop({ required: true, trim: true })
   location: string;
 
+  @Field(() => Boolean)
+  @prop()
+  active: boolean;
+
   @Field(() => Date)
   @prop()
   createdAt: Date;

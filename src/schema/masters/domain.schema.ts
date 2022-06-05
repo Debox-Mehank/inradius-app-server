@@ -18,6 +18,10 @@ export class Domain {
   @prop({ required: true, trim: true })
   domain: string;
 
+  @Field(() => Boolean)
+  @prop()
+  active: boolean;
+
   @Field(() => Date)
   @prop()
   createdAt: Date;
@@ -52,6 +56,10 @@ export class SubDomain {
   @prop({ required: true, unique: true, trim: true })
   subDomain: string;
 
+  @Field(() => Boolean)
+  @prop()
+  active: boolean;
+  
   @Field(() => Date)
   @prop()
   createdAt: Date;

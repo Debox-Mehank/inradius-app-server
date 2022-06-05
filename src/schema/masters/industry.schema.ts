@@ -11,6 +11,10 @@ export class Industry {
   @prop({ required: true, trim: true })
   industry: string;
 
+  @Field(() => Boolean)
+  @prop()
+  active: boolean;
+  
   @Field(() => Date)
   @prop()
   createdAt: Date;

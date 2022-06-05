@@ -14,6 +14,10 @@ export class Skill {
   @prop({ required: true, trim: true })
   skill: string;
 
+  @Field(() => Boolean)
+  @prop()
+  active: boolean;
+  
   @Field(() => Date)
   @prop()
   createdAt: Date;
