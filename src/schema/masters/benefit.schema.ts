@@ -11,6 +11,10 @@ export class Benefit {
   @prop({ required: true, trim: true })
   benefit: string;
 
+  @Field(() => Boolean)
+  @prop()
+  active: boolean;
+
   @Field(() => Date)
   @prop()
   createdAt: Date;
