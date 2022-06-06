@@ -36,3 +36,16 @@ export class IndustryInput {
   @Field(() => Boolean)
   active: boolean;
 }
+
+@InputType()
+export class UpdateIndustryInput {
+
+  @Field(() => ID, {nullable: false})
+  id: String
+
+  @Field(() => String, { nullable: true })
+  industry: string;
+
+  @Field(() => Boolean, {nullable: true})
+  active: boolean;
+}

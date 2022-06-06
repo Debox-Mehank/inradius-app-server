@@ -1,24 +1,28 @@
 import { ApolloError } from "apollo-server";
-import { BenefitInput, BenefitModel } from "../schema/masters/benefit.schema";
+import { BenefitInput, BenefitModel, UpdateBenefitInput } from "../schema/masters/benefit.schema";
 import {
   DomainInput,
   DomainModel,
   SubDomainInput,
   SubDomainModel,
+  UpdateDomainInput,
 } from "../schema/masters/domain.schema";
 import {
   IndustryInput,
   IndustryModel,
+  UpdateIndustryInput,
 } from "../schema/masters/industry.schema";
 import {
   LocationInput,
   LocationModel,
+  UpdateLocationInput,
 } from "../schema/masters/location.schema";
 import {
   QualificationInput,
   QualificationModel,
+  UpdateQualificationInput,
 } from "../schema/masters/qualification.schema";
-import { SkillInput, SkillModel } from "../schema/masters/skills.schema";
+import { SkillInput, SkillModel, UpdateSkillInput } from "../schema/masters/skills.schema";
 import {
   SurveyInput,
   SurveyModel,
@@ -35,12 +39,32 @@ class MastersService {
     }
   }
 
+  async updateLocation(input: UpdateLocationInput){
+    try{
+      return await LocationModel.findByIdAndUpdate(input.id, {location: input.location, active: input.active}, {new: true})
+    }
+    catch(error){
+      console.log("Location Updating ERROR", error)
+      throw new ApolloError("Error in updating location!")
+    }
+  }
+
   async addQualification(input: QualificationInput) {
     try {
       return QualificationModel.create(input);
     } catch (error) {
       console.log("Qualification Adding ERROR : " + error);
       throw new ApolloError("Error in adding qualification!");
+    }
+  }
+
+  async updateQualification(input: UpdateQualificationInput){
+    try{
+      return await QualificationModel.findByIdAndUpdate(input.id, {qualification: input.qualification, active: input.active}, {new: true})
+    }
+    catch(error){
+      console.log("Qualification Updating ERROR", error)
+      throw new ApolloError("Error in updating qualification!")
     }
   }
 
@@ -53,12 +77,32 @@ class MastersService {
     }
   }
 
+  async updateIndustry(input: UpdateIndustryInput){
+    try{
+      return await IndustryModel.findByIdAndUpdate(input.id, {industry: input.industry, active: input.active}, {new: true})
+    }
+    catch(error){
+      console.log("Industry Updating ERROR", error)
+      throw new ApolloError("Error in updating industry!")
+    }
+  }
+
   async addDomain(input: DomainInput) {
     try {
       return DomainModel.create(input);
     } catch (error) {
       console.log("Domain Adding ERROR : " + error);
       throw new ApolloError("Error in adding domain!");
+    }
+  }
+
+  async updateDomain(input: UpdateDomainInput){
+    try{
+      return await DomainModel.findByIdAndUpdate(input.id, {domain: input.domain, active: input.active}, {new: true})
+    }
+    catch(error){
+      console.log("Domain Updating ERROR", error)
+      throw new ApolloError("Error in updating domain!")
     }
   }
 
@@ -77,6 +121,16 @@ class MastersService {
     } catch (error) {
       console.log("Skill Adding ERROR : " + error);
       throw new ApolloError("Error in adding skill!");
+    }
+  }
+
+  async updateSkill(input: UpdateSkillInput){
+    try{
+      return await SkillModel.findByIdAndUpdate(input.id, {skill: input.skill, active: input.active}, {new: true})
+    }
+    catch(error){
+      console.log("Skill Updating ERROR", error)
+      throw new ApolloError("Error in updating skill!")
     }
   }
 
@@ -105,6 +159,16 @@ class MastersService {
     } catch (error) {
       console.log("Benefit Adding ERROR : " + error);
       throw new ApolloError("Error in adding employer benefit!");
+    }
+  }
+
+  async updateBenefit(input: UpdateBenefitInput){
+    try{
+      return await BenefitModel.findByIdAndUpdate(input.id, {benefit: input.benefit, active: input.active}, {new: true})
+    }
+    catch(error){
+      console.log("Benefit Updating ERROR", error)
+      throw new ApolloError("Error in updating benefit!")
     }
   }
 

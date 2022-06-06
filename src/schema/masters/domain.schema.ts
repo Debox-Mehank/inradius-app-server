@@ -87,3 +87,16 @@ export class SubDomainInput {
   @Field(() => Boolean)
   active: boolean;
 }
+
+@InputType()
+export class UpdateDomainInput {
+
+  @Field(() => ID, {nullable: false})
+  id: String
+
+  @Field(() => String, { nullable: true })
+  domain: string;
+
+  @Field(() => Boolean, {nullable: true})
+  active: boolean;
+}

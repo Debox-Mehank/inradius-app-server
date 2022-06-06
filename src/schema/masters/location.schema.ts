@@ -36,3 +36,16 @@ export class LocationInput {
   @Field(() => Boolean)
   active: boolean;
 }
+
+@InputType()
+export class UpdateLocationInput {
+
+  @Field(() => ID, {nullable: false})
+  id: String
+
+  @Field(() => String, { nullable: true })
+  location: string;
+
+  @Field(() => Boolean, {nullable: true})
+  active: boolean;
+}
