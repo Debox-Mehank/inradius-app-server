@@ -14,7 +14,7 @@ export class Qualification {
   @Field(() => Boolean)
   @prop()
   active: boolean;
-  
+
   @Field(() => Date)
   @prop()
   createdAt: Date;
@@ -32,4 +32,7 @@ export const QualificationModel = getModelForClass(Qualification, {
 export class QualificationInput {
   @Field(() => String, { nullable: false })
   qualification: string;
+
+  @Field(() => Boolean)
+  active: boolean;
 }

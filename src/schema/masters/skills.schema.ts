@@ -17,7 +17,7 @@ export class Skill {
   @Field(() => Boolean)
   @prop()
   active: boolean;
-  
+
   @Field(() => Date)
   @prop()
   createdAt: Date;
@@ -35,4 +35,7 @@ export const SkillModel = getModelForClass(Skill, {
 export class SkillInput {
   @Field(() => String, { nullable: false })
   skill: string;
+
+  @Field(() => Boolean)
+  active: boolean;
 }

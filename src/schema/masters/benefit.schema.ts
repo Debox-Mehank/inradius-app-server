@@ -32,4 +32,7 @@ export const BenefitModel = getModelForClass(Benefit, {
 export class BenefitInput {
   @Field(() => String, { nullable: false })
   benefit: string;
+
+  @Field(() => Boolean)
+  active: boolean;
 }

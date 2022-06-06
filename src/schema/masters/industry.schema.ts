@@ -14,7 +14,7 @@ export class Industry {
   @Field(() => Boolean)
   @prop()
   active: boolean;
-  
+
   @Field(() => Date)
   @prop()
   createdAt: Date;
@@ -32,4 +32,7 @@ export const IndustryModel = getModelForClass(Industry, {
 export class IndustryInput {
   @Field(() => String, { nullable: false })
   industry: string;
+
+  @Field(() => Boolean)
+  active: boolean;
 }

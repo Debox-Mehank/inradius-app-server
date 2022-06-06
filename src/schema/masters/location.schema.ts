@@ -32,4 +32,7 @@ export const LocationModel = getModelForClass(Location, {
 export class LocationInput {
   @Field(() => String, { nullable: false })
   location: string;
+
+  @Field(() => Boolean)
+  active: boolean;
 }

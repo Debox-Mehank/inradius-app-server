@@ -39,6 +39,9 @@ export const DomainModel = getModelForClass(Domain, {
 export class DomainInput {
   @Field(() => String, { nullable: false })
   domain: string;
+
+  @Field(() => Boolean)
+  active: boolean;
 }
 
 @plugin(mongooseAutoPopulate as any)
@@ -59,7 +62,7 @@ export class SubDomain {
   @Field(() => Boolean)
   @prop()
   active: boolean;
-  
+
   @Field(() => Date)
   @prop()
   createdAt: Date;
@@ -80,4 +83,7 @@ export class SubDomainInput {
 
   @Field(() => String, { nullable: false })
   subDomain: string;
+
+  @Field(() => Boolean)
+  active: boolean;
 }
