@@ -1,18 +1,20 @@
 import { Arg, Mutation, Query, Resolver, UseMiddleware } from "type-graphql";
-import { Benefit, BenefitInput } from "../schema/masters/benefit.schema";
+import { Benefit, BenefitInput, UpdateBenefitInput } from "../schema/masters/benefit.schema";
 import {
   Domain,
   DomainInput,
   SubDomain,
   SubDomainInput,
+  UpdateDomainInput,
 } from "../schema/masters/domain.schema";
-import { Industry, IndustryInput } from "../schema/masters/industry.schema";
-import { Location, LocationInput } from "../schema/masters/location.schema";
+import { Industry, IndustryInput, UpdateIndustryInput } from "../schema/masters/industry.schema";
+import { Location, LocationInput, UpdateLocationInput } from "../schema/masters/location.schema";
 import {
   Qualification,
   QualificationInput,
+  UpdateQualificationInput,
 } from "../schema/masters/qualification.schema";
-import { Skill, SkillInput } from "../schema/masters/skills.schema";
+import { Skill, SkillInput, UpdateSkillInput } from "../schema/masters/skills.schema";
 import {
   Survey,
   SurveyInput,
@@ -31,6 +33,42 @@ export default class MastersResolver {
   @UseMiddleware([isAuth, isAdmin])
   addLocation(@Arg("input") input: LocationInput) {
     return this.service.addLocation(input);
+  }
+
+  @Mutation(() => Location)
+  @UseMiddleware([isAuth, isAdmin])
+  updateLocation(@Arg("input") input: UpdateLocationInput) {
+    return this.service.updateLocation(input);
+  }
+
+  @Mutation(() => Industry)
+  @UseMiddleware([isAuth, isAdmin])
+  updateIndustry(@Arg("input") input: UpdateIndustryInput) {
+    return this.service.updateIndustry(input);
+  }
+
+  @Mutation(() => Domain)
+  @UseMiddleware([isAuth, isAdmin])
+  updateDomain(@Arg("input") input: UpdateDomainInput) {
+    return this.service.updateDomain(input);
+  }
+
+  @Mutation(() => Benefit)
+  @UseMiddleware([isAuth, isAdmin])
+  updateBenefit(@Arg("input") input: UpdateBenefitInput) {
+    return this.service.updateBenefit(input);
+  }
+
+  @Mutation(() => Qualification)
+  @UseMiddleware([isAuth, isAdmin])
+  updateQualification(@Arg("input") input: UpdateQualificationInput) {
+    return this.service.updateQualification(input);
+  }
+
+  @Mutation(() => Skill)
+  @UseMiddleware([isAuth, isAdmin])
+  updateSkill(@Arg("input") input: UpdateSkillInput) {
+    return this.service.updateSkill(input);
   }
 
   @Mutation(() => Qualification)

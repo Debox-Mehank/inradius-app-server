@@ -32,4 +32,20 @@ export const QualificationModel = getModelForClass(Qualification, {
 export class QualificationInput {
   @Field(() => String, { nullable: false })
   qualification: string;
+
+  @Field(() => Boolean)
+  active: boolean;
+}
+
+@InputType()
+export class UpdateQualificationInput {
+
+  @Field(() => ID, {nullable: false})
+  id: String
+
+  @Field(() => String, { nullable: true })
+  qualification: string;
+
+  @Field(() => Boolean, {nullable: true})
+  active: boolean;
 }

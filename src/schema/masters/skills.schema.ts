@@ -35,4 +35,20 @@ export const SkillModel = getModelForClass(Skill, {
 export class SkillInput {
   @Field(() => String, { nullable: false })
   skill: string;
+
+  @Field(() => Boolean)
+  active: boolean;
+}
+
+@InputType()
+export class UpdateSkillInput {
+
+  @Field(() => ID, {nullable: false})
+  id: String
+
+  @Field(() => String, { nullable: true })
+  skill: string;
+
+  @Field(() => Boolean, {nullable: true})
+  active: boolean;
 }
