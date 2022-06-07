@@ -19,7 +19,7 @@ export class Domain {
   domain: string;
 
   @Field(() => Boolean)
-  @prop()
+  @prop({ default: true })
   active: boolean;
 
   @Field(() => Date)
@@ -57,9 +57,9 @@ export class SubDomain {
   subDomain: string;
 
   @Field(() => Boolean)
-  @prop()
+  @prop({ default: true })
   active: boolean;
-  
+
   @Field(() => Date)
   @prop()
   createdAt: Date;

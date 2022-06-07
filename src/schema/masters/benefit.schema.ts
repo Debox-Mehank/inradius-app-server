@@ -12,7 +12,7 @@ export class Benefit {
   benefit: string;
 
   @Field(() => Boolean)
-  @prop()
+  @prop({ default: true })
   active: boolean;
 
   @Field(() => Date)

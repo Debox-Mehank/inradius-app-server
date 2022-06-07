@@ -12,9 +12,9 @@ export class Industry {
   industry: string;
 
   @Field(() => Boolean)
-  @prop()
+  @prop({ default: true })
   active: boolean;
-  
+
   @Field(() => Date)
   @prop()
   createdAt: Date;

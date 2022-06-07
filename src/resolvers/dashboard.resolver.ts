@@ -34,4 +34,13 @@ export default class DashboardResolver {
     );
     return data;
   }
+
+  @Query(() => Boolean)
+  @UseMiddleware([isAuth])
+  async interestJob(
+    @Arg("jobId") jobId: String,
+    @Ctx() context: Context
+  ): Promise<Boolean> {
+    return this.service.interestJob(jobId, context);
+  }
 }

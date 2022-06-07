@@ -18,8 +18,9 @@ const TOTAL_SKILLS = 4;
 const TOTAL_SUBDOMAINS = 3;
 
 const SKILLS_WEIGHTAGE = 0.4;
-const SUBDOMAINS_WEIGHTAGE = 0.4;
-const EXPERIENCE_WEIGHTAGE = 0.2;
+const SUBDOMAINS_WEIGHTAGE = 0.3;
+const PAY_WEIGHTAGE = 0.2;
+const EXPERIENCE_WEIGHTAGE = 0.1;
 
 // Logics Are implemented here
 class DashboardService {
@@ -113,13 +114,21 @@ class DashboardService {
                       defaultScore += EXPERIENCE_WEIGHTAGE * 100;
                     }
 
-                    defaultScore += skillsValue + subDomainsValue;
+                    const newPayWeightage = PAY_WEIGHTAGE / TOTAL_SKILLS;
+
+                    const payValue =
+                      (employee.expectedPay / (job.minPay + job.maxPay)) *
+                      100 *
+                      newPayWeightage *
+                      skillsMatched;
+
+                    defaultScore += skillsValue + subDomainsValue + payValue;
 
                     employeeExploreArr.push({
                       employerId: employer,
                       jobId: job,
                       userId: employer.user,
-                      score: defaultScore,
+                      score: parseFloat(defaultScore.toFixed(2)),
                     });
                   }
                 }
@@ -239,7 +248,15 @@ class DashboardService {
                       defaultScore += EXPERIENCE_WEIGHTAGE * 100;
                     }
 
-                    defaultScore += skillsValue + subDomainsValue;
+                    const newPayWeightage = PAY_WEIGHTAGE / TOTAL_SKILLS;
+
+                    const payValue =
+                      (employee.expectedPay / (job.minPay + job.maxPay)) *
+                      100 *
+                      newPayWeightage *
+                      skillsMatched;
+
+                    defaultScore += skillsValue + subDomainsValue + payValue;
 
                     employerExploreArr.push({
                       score: parseFloat(defaultScore.toFixed(2)),
@@ -259,6 +276,10 @@ class DashboardService {
       console.log(error);
       return [];
     }
+  }
+
+  async interestJob(jobId: String, ctx: Context): Promise<Boolean> {
+    return true;
   }
 }
 

@@ -12,7 +12,7 @@ export class Location {
   location: string;
 
   @Field(() => Boolean)
-  @prop()
+  @prop({ default: true })
   active: boolean;
 
   @Field(() => Date)
