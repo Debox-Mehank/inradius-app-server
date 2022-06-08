@@ -19,6 +19,7 @@ import {
   Survey,
   SurveyInput,
   SurveyType,
+  UpdateSurveyInput,
 } from "../schema/masters/survey.schema";
 import MastersService from "../service/masters.service";
 import { isAdmin, isAuth } from "../utils/permissions";
@@ -161,6 +162,12 @@ export default class MastersResolver {
     @Arg("type", () => SurveyType, { nullable: true }) type: SurveyType
   ) {
     return this.service.allSurveyQuestion(type);
+  }
+
+  @Mutation(() => Survey)
+  @UseMiddleware([isAuth, isAdmin])
+  updateSurveyQuestion(@Arg("input") input: UpdateSurveyInput){
+    return this.service.updateSurveyQuestion(input);
   }
 
   @Query(() => [Benefit])

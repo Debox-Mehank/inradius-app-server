@@ -35,6 +35,10 @@ export class Survey {
   @prop({ required: true })
   type: SurveyType;
 
+  @Field(() => Boolean)
+  @prop({ default: true })
+  active: boolean;
+
   @Field(() => Date)
   @prop()
   createdAt: Date;
@@ -58,4 +62,22 @@ export class SurveyInput {
 
   @Field(() => SurveyType)
   type: SurveyType;
+
+  @Field(() => Boolean, {nullable: true})
+  active: boolean;
+}
+
+@InputType()
+export class UpdateSurveyInput {
+  @Field(() => ID, {nullable: false})
+  id: String
+
+  @Field(() => String, { nullable: true })
+  question: string;
+
+  @Field(() => [String], {nullable: true})
+  options: string[];
+
+  @Field(() => Boolean, {nullable: true})
+  active: boolean;
 }

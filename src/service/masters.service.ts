@@ -27,6 +27,7 @@ import {
   SurveyInput,
   SurveyModel,
   SurveyType,
+  UpdateSurveyInput,
 } from "../schema/masters/survey.schema";
 
 class MastersService {
@@ -201,6 +202,16 @@ class MastersService {
       return SurveyModel.find({ type: surveyType.toString() });
     } else {
       return SurveyModel.find({});
+    }
+  }
+
+  async updateSurveyQuestion(input: UpdateSurveyInput) {
+    try{
+      return await SurveyModel.findByIdAndUpdate(input.id, {question: input.question, options: input.options, active: input.active}, {new: true})
+    }
+    catch(error){
+      console.log("Benefit Updating SURVEY", error)
+      throw new ApolloError("Error in updating survey!")
     }
   }
 

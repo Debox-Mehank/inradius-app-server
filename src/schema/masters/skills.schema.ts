@@ -42,7 +42,6 @@ export class SkillInput {
 
 @InputType()
 export class UpdateSkillInput {
-
   @Field(() => ID, {nullable: false})
   id: String
 
