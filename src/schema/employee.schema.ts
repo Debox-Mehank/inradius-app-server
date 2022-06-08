@@ -51,6 +51,10 @@ export class Employee {
   @prop({ type: UserSurvey, default: [] })
   userSurvey: mongoose.Types.Array<UserSurvey>;
 
+  @Field(() => String, { nullable: true })
+  @prop({ default: null })
+  shortDescription: string;
+
   @Field(() => Number, { nullable: true })
   @prop({ default: null })
   radius: number;
@@ -139,10 +143,6 @@ export class Employee {
   @prop({ default: null })
   aadharCard: string;
 
-  @Field(() => [User])
-  @prop({ ref: () => User, autopopulate: true })
-  interests: Ref<User>[];
-
   @Field(() => Date)
   @prop()
   createdAt: Date;
@@ -160,6 +160,9 @@ export const EmployeeModel = getModelForClass(Employee, {
 export class UpdateEmployeeInput {
   @Field(() => [UserSurveyInput], { nullable: true })
   userSurvey?: UserSurveyInput[];
+
+  @Field(() => String, { nullable: true })
+  shortDescription: string;
 
   @Field(() => Number, { nullable: true })
   radius?: number;

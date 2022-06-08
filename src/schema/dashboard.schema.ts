@@ -18,7 +18,6 @@ export class DashboardEmployee {
   userId: User;
 }
 
-@plugin(mongooseAutoPopulate)
 @ObjectType()
 export class DashboardEmployer {
   @Field(() => Number, { nullable: false })

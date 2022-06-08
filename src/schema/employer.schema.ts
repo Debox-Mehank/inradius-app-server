@@ -114,10 +114,6 @@ export class Employer {
   @prop({ default: null })
   attritionRate: number;
 
-  @Field(() => [User])
-  @prop({ ref: () => User, autopopulate: true })
-  interests: Ref<User>[];
-
   @Field(() => Date)
   @prop()
   createdAt: Date;

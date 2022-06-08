@@ -4,6 +4,7 @@ import MastersResolver from "./masters.resolver";
 import EmployeeResolver from "./employee.resolver";
 import EmployerResolver from "./employer.resolver";
 import DashboardResolver from "./dashboard.resolver";
+import InterestsResolver from "./interests.resolver";
 
 export const resolvers = [
   UserResolver,
@@ -12,4 +13,5 @@ export const resolvers = [
   EmployeeResolver,
   EmployerResolver,
   DashboardResolver,
+  InterestsResolver,
 ] as const;
