@@ -143,7 +143,7 @@ class UserService {
     } else if (user.type === UserRole.employer) {
       const job = await EmployerJobModel.create({
         user: user._id,
-        jobStatus: EmployerJobStatusEnum.Closed,
+        jobStatus: EmployerJobStatusEnum.Open,
       });
       EmployerModel.create({
         user: user._id,
