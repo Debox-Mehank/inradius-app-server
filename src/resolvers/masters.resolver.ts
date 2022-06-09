@@ -1,5 +1,16 @@
-import { Arg, Mutation, Query, Resolver, UseMiddleware } from "type-graphql";
-import { Benefit, BenefitInput, UpdateBenefitInput } from "../schema/masters/benefit.schema";
+import {
+  Arg,
+  Ctx,
+  Mutation,
+  Query,
+  Resolver,
+  UseMiddleware,
+} from "type-graphql";
+import {
+  Benefit,
+  BenefitInput,
+  UpdateBenefitInput,
+} from "../schema/masters/benefit.schema";
 import {
   Domain,
   DomainInput,
@@ -7,14 +18,26 @@ import {
   SubDomainInput,
   UpdateDomainInput,
 } from "../schema/masters/domain.schema";
-import { Industry, IndustryInput, UpdateIndustryInput } from "../schema/masters/industry.schema";
-import { Location, LocationInput, UpdateLocationInput } from "../schema/masters/location.schema";
+import {
+  Industry,
+  IndustryInput,
+  UpdateIndustryInput,
+} from "../schema/masters/industry.schema";
+import {
+  Location,
+  LocationInput,
+  UpdateLocationInput,
+} from "../schema/masters/location.schema";
 import {
   Qualification,
   QualificationInput,
   UpdateQualificationInput,
 } from "../schema/masters/qualification.schema";
-import { Skill, SkillInput, UpdateSkillInput } from "../schema/masters/skills.schema";
+import {
+  Skill,
+  SkillInput,
+  UpdateSkillInput,
+} from "../schema/masters/skills.schema";
 import {
   Survey,
   SurveyInput,
@@ -22,6 +45,7 @@ import {
   UpdateSurveyInput,
 } from "../schema/masters/survey.schema";
 import MastersService from "../service/masters.service";
+import Context from "../types/context";
 import { isAdmin, isAuth } from "../utils/permissions";
 
 @Resolver()
@@ -122,8 +146,8 @@ export default class MastersResolver {
 
   @Query(() => [Location])
   @UseMiddleware([isAuth])
-  allLocations() {
-    return this.service.allLocation();
+  allLocations(@Ctx() context: Context) {
+    return this.service.allLocation(context);
   }
 
   @Query(() => [Qualification])
@@ -166,7 +190,7 @@ export default class MastersResolver {
 
   @Mutation(() => Survey)
   @UseMiddleware([isAuth, isAdmin])
-  updateSurveyQuestion(@Arg("input") input: UpdateSurveyInput){
+  updateSurveyQuestion(@Arg("input") input: UpdateSurveyInput) {
     return this.service.updateSurveyQuestion(input);
   }
 
