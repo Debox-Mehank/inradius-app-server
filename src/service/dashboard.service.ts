@@ -59,9 +59,6 @@ class DashboardService {
       },
     });
 
-    // console.log(myInterests.length);
-    // console.log(myMatches.length);
-
     const allEmployers = await EmployerModel.find({
       employerVerified: true,
     });

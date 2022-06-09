@@ -37,19 +37,28 @@ export default class InterestsResolver {
 
   @Query(() => [Interests])
   @UseMiddleware([isAuth])
-  async getMyInterests(@Ctx() context: Context): Promise<Interests[]> {
+  async getMyInterests(
+    @Arg("jobId", () => String, { nullable: true }) jobId: String,
+    @Ctx() context: Context
+  ): Promise<Interests[]> {
     return this.service.getMyInterests(context);
   }
 
   @Query(() => [Interests])
   @UseMiddleware([isAuth])
-  async getShownInterests(@Ctx() context: Context): Promise<Interests[]> {
+  async getShownInterests(
+    @Arg("jobId", () => String, { nullable: true }) jobId: String,
+    @Ctx() context: Context
+  ): Promise<Interests[]> {
     return this.service.getShownInterests(context);
   }
 
   @Query(() => [Interests])
   @UseMiddleware([isAuth])
-  async getMatched(@Ctx() context: Context): Promise<Interests[]> {
+  async getMatched(
+    @Arg("jobId", () => String, { nullable: true }) jobId: String,
+    @Ctx() context: Context
+  ): Promise<Interests[]> {
     return this.service.getMatched(context);
   }
 }

@@ -39,6 +39,18 @@ export class UserWorkExp {
   @Field(() => Boolean)
   @prop({ required: true, default: false })
   current: boolean;
+
+  @Field(() => Boolean)
+  @prop({ required: true, default: false })
+  onNotice: boolean;
+
+  @Field(() => Date, { nullable: true })
+  @prop({ default: null })
+  lastDateAtCurrentEmployer: Date;
+
+  @Field(() => Date, { nullable: true })
+  @prop({ default: null })
+  expectedJoinigDate: Date;
 }
 
 @InputType()
@@ -60,4 +72,13 @@ export class UserWorkExpInput {
 
   @Field(() => Boolean)
   current: boolean;
+
+  @Field(() => Boolean)
+  onNotice: boolean;
+
+  @Field(() => Date, { nullable: true })
+  lastDateAtCurrentEmployer: Date;
+
+  @Field(() => Date, { nullable: true })
+  expectedJoinigDate: Date;
 }

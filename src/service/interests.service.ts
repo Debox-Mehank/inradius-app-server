@@ -121,7 +121,7 @@ class InterestsService {
     }
   }
 
-  async getMyInterests(ctx: Context): Promise<Interests[]> {
+  async getMyInterests(ctx: Context, jobId?: String): Promise<Interests[]> {
     if (!ctx.user) {
       throw new ApolloError("Internal Server Error");
     }
@@ -142,6 +142,7 @@ class InterestsService {
       const employer = await getEmployerId(user._id);
       const allInterests = await InterestsModel.find({
         employerId: employer,
+        jobId: jobId,
         employer: true,
         employee: null,
       });
@@ -151,7 +152,7 @@ class InterestsService {
     }
   }
 
-  async getShownInterests(ctx: Context): Promise<Interests[]> {
+  async getShownInterests(ctx: Context, jobId?: String): Promise<Interests[]> {
     if (!ctx.user) {
       throw new ApolloError("Internal Server Error");
     }
@@ -172,6 +173,7 @@ class InterestsService {
       const employer = await getEmployerId(user._id);
       const allInterests = await InterestsModel.find({
         employerId: employer,
+        jobId: jobId,
         employer: null,
         employee: true,
       });
@@ -181,7 +183,7 @@ class InterestsService {
     }
   }
 
-  async getMatched(ctx: Context): Promise<Interests[]> {
+  async getMatched(ctx: Context, jobId?: String): Promise<Interests[]> {
     if (!ctx.user) {
       throw new ApolloError("Internal Server Error");
     }
@@ -202,6 +204,7 @@ class InterestsService {
       const employer = await getEmployerId(user._id);
       const allMatched = await InterestsModel.find({
         employerId: employer,
+        jobId: jobId,
         employer: true,
         employee: true,
       });
