@@ -152,40 +152,41 @@ export default class MastersResolver {
 
   @Query(() => [Qualification])
   @UseMiddleware([isAuth])
-  allQualifications() {
-    return this.service.allQualifications();
+  allQualifications(@Ctx() context: Context) {
+    return this.service.allQualifications(context);
   }
 
   @Query(() => [Industry])
   @UseMiddleware([isAuth])
-  allIndustries() {
-    return this.service.allIndustries();
+  allIndustries(@Ctx() context: Context) {
+    return this.service.allIndustries(context);
   }
 
   @Query(() => [Domain])
   @UseMiddleware([isAuth])
-  allDomains() {
-    return this.service.allDomains();
+  allDomains(@Ctx() context: Context) {
+    return this.service.allDomains(context);
   }
 
   @Query(() => [SubDomain])
   @UseMiddleware([isAuth])
-  allSubDomains() {
-    return this.service.allSubDomains();
+  allSubDomains(@Ctx() context: Context) {
+    return this.service.allSubDomains(context);
   }
 
   @Query(() => [Skill])
   @UseMiddleware([isAuth])
-  allSkills() {
-    return this.service.allSkills();
+  allSkills(@Ctx() context: Context) {
+    return this.service.allSkills(context);
   }
 
   @Query(() => [Survey])
   @UseMiddleware([isAuth])
   allSurveyQuestion(
-    @Arg("type", () => SurveyType, { nullable: true }) type: SurveyType
+    @Arg("type", () => SurveyType, { nullable: true }) type: SurveyType,
+@Ctx() context: Context
   ) {
-    return this.service.allSurveyQuestion(type);
+    return this.service.allSurveyQuestion(type, context);
   }
 
   @Mutation(() => Survey)
@@ -196,7 +197,7 @@ export default class MastersResolver {
 
   @Query(() => [Benefit])
   @UseMiddleware([isAuth])
-  allBenefits() {
-    return this.service.allBenefits();
+  allBenefits(@Ctx() context: Context) {
+    return this.service.allBenefits(context);
   }
 }

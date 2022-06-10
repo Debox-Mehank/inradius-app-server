@@ -209,29 +209,49 @@ class MastersService {
     }
   }
 
-  async allQualifications() {
+  async allQualifications(ctx: Context) {
+    if (ctx.role === UserRole.employee || ctx.role === UserRole.employer) {
+    return QualificationModel.find({active: true});
+    } else {
     return QualificationModel.find({});
+    }
   }
 
-  async allIndustries() {
+  async allIndustries(ctx: Context) {
+    if (ctx.role === UserRole.employee || ctx.role === UserRole.employer) {
+    return IndustryModel.find({active: true});
+    } else {
     return IndustryModel.find({});
+    }
   }
 
-  async allDomains() {
+  async allDomains(ctx: Context) {
+    if (ctx.role === UserRole.employee || ctx.role === UserRole.employer) {
+    return DomainModel.find({active: true});
+    } else {
     return DomainModel.find({});
+    }
   }
 
-  async allSubDomains() {
+  async allSubDomains(ctx: Context) {
+    if (ctx.role === UserRole.employee || ctx.role === UserRole.employer) {
+    return SubDomainModel.find({active: true});
+    } else {
     return SubDomainModel.find({});
+    }
   }
 
-  async allSkills() {
+  async allSkills(ctx: Context) {
+    if (ctx.role === UserRole.employee || ctx.role === UserRole.employer) {
+    return SkillModel.find({active: true});
+    } else {
     return SkillModel.find({});
+    }
   }
 
-  async allSurveyQuestion(surveyType: SurveyType) {
-    if (surveyType !== undefined) {
-      return SurveyModel.find({ type: surveyType.toString() });
+  async allSurveyQuestion(surveyType: SurveyType, ctx: Context) {
+    if (surveyType !== undefined && (ctx.role === UserRole.employee || ctx.role === UserRole.employer)) {
+      return SurveyModel.find({ type: surveyType.toString(), active: true });
     } else {
       return SurveyModel.find({});
     }
@@ -254,8 +274,12 @@ class MastersService {
     }
   }
 
-  async allBenefits() {
+  async allBenefits(ctx: Context) {
+    if (ctx.role === UserRole.employee || ctx.role === UserRole.employer) {
+    return BenefitModel.find({active: true});
+    } else {
     return BenefitModel.find({});
+    }
   }
 }
 
