@@ -39,7 +39,6 @@ export class IndustryInput {
 
 @InputType()
 export class UpdateIndustryInput {
-
   @Field(() => ID, {nullable: false})
   id: String
 

@@ -17,6 +17,7 @@ import {
   SubDomain,
   SubDomainInput,
   UpdateDomainInput,
+  UpdateSubDomainInput,
 } from "../schema/masters/domain.schema";
 import {
   Industry,
@@ -118,6 +119,12 @@ export default class MastersResolver {
   @UseMiddleware([isAuth, isAdmin])
   addSubDomain(@Arg("input") input: SubDomainInput) {
     return this.service.addSubDomain(input);
+  }
+
+  @Mutation(() => SubDomain)
+  @UseMiddleware([isAuth, isAdmin])
+  updateSubDomain(@Arg("input") input: UpdateSubDomainInput) {
+    return this.service.updateSubDomain(input);
   }
 
   @Mutation(() => Skill)

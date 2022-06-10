@@ -44,6 +44,18 @@ export class DomainInput {
   active: boolean;
 }
 
+@InputType()
+export class UpdateSubDomainInput {
+  @Field(() => ID, {nullable: false})
+  id: String
+
+  @Field(() => String, { nullable: true })
+  subDomain: string;
+
+  @Field(() => Boolean, {nullable: true})
+  active: boolean;
+}
+
 @plugin(mongooseAutoPopulate as any)
 @index({ subDomain: 1 })
 @ObjectType()

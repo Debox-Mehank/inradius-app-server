@@ -10,6 +10,7 @@ import {
   SubDomainInput,
   SubDomainModel,
   UpdateDomainInput,
+  UpdateSubDomainInput,
 } from "../schema/masters/domain.schema";
 import {
   IndustryInput,
@@ -135,6 +136,19 @@ class MastersService {
     } catch (error) {
       console.log("SubDomain Adding ERROR : " + error);
       throw new ApolloError("Error in adding sub-domain!");
+    }
+  }
+
+  async updateSubDomain(input: UpdateSubDomainInput) {
+    try {
+      return await SubDomainModel.findByIdAndUpdate(
+        input.id,
+        { subDomain: input.subDomain, active: input.active },
+        { new: true }
+      );
+    } catch (error) {
+      console.log("SubDomain Updating ERROR", error);
+      throw new ApolloError("Error in updating subDomain!");
     }
   }
 
