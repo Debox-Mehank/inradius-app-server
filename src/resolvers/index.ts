@@ -5,6 +5,7 @@ import EmployeeResolver from "./employee.resolver";
 import EmployerResolver from "./employer.resolver";
 import DashboardResolver from "./dashboard.resolver";
 import InterestsResolver from "./interests.resolver";
+import LoginContentResolver from "./login.content.resolver";
 
 export const resolvers = [
   UserResolver,
@@ -14,4 +15,5 @@ export const resolvers = [
   EmployerResolver,
   DashboardResolver,
   InterestsResolver,
+  LoginContentResolver
 ] as const;
