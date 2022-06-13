@@ -25,7 +25,7 @@ export default class LoginContentService{
         try {
           return await LoginContentModel.findByIdAndUpdate(
             input.id,
-            { loginContent: input.loginContent, active: input.active },
+            { loginContent: input.loginContent, imageUrl: input.imageUrl, active: input.active },
             { new: true }
           );
         } catch(error) {

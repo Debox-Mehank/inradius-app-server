@@ -11,6 +11,10 @@ export class LoginContent {
   @prop({ required: true, trim: true })
   loginContent: string;
 
+  @Field(() => String, { nullable: false })
+  @prop({ required: true, trim: true })
+  imageUrl: string;
+
   @Field(() => Boolean)
   @prop({ default: true })
   active: boolean;
@@ -33,6 +37,9 @@ export class LoginContentInput {
   @Field(() => String, { nullable: false })
   loginContent: string;
 
+  @Field(() => String, { nullable: false })
+  imageUrl: string;
+
   @Field(() => Boolean)
   active: boolean;
 }
@@ -45,6 +52,9 @@ export class UpdateLoginContentInput {
   @Field(() => String, { nullable: true })
   loginContent: string;
 
+  @Field(() => String, { nullable: true })
+  imageUrl: string;
+  
   @Field(() => Boolean, {nullable: true})
   active: boolean;
 }
