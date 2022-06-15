@@ -18,8 +18,13 @@ export enum UserRole {
 export enum UserStatus {
   pending = "pending",
   active = "active",
-  deactivedByAdmin = "deactivedByAdmin",
-  deactivedByPaymentFailure = "deactivedByPaymentFailure",
+  paymentPending = "paymentPending",
+  penaltyPending = "penaltyPending",
+  blockedByAdmin = "blockedByAdmin",
+  inactive = "inactive",
+  hired = "hired",
+  // deactivedByAdmin = "deactivedByAdmin",
+  // deactivedByPaymentFailure = "deactivedByPaymentFailure",
 }
 
 registerEnumType(UserRole, {
@@ -93,6 +98,14 @@ export class User {
   @prop({ required: true, default: false })
   isSurveyCompleted: boolean;
 
+  @Field(() => Date, { nullable: true })
+  @prop({ default: null })
+  lastLoggedIn: Date;
+
+  @Field(() => Date, { nullable: true })
+  @prop({ default: null })
+  lastLoggedOut: Date;
+
   @Field(() => Date)
   @prop()
   createdAt: Date;
@@ -161,3 +174,9 @@ export class ResendEmailVerifyInput {
   @Field(() => String, { nullable: false })
   token: string;
 }
+
+// @InputType()
+// export class UpdateUserStatusInput {
+//   @Field(() => UserStatus)
+//   userStatus: UserStatus;
+// }

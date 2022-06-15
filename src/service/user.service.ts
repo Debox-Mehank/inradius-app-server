@@ -16,6 +16,7 @@ import {
   RegisterInput,
   UserModel,
   UserRole,
+  UserStatus,
 } from "../schema/user.schema";
 import Context from "../types/context";
 import { getUserByEmail, getUserById, getUserByNumber } from "../utils/helper";
@@ -96,10 +97,16 @@ class UserService {
       });
     }
 
+    await UserModel.findOneAndUpdate(
+      { _id: user._id },
+      { $set: { lastLoggedIn: new Date() } },
+      { new: true }
+    );
+
     return true;
   }
 
-  logout(context: Context) {
+  async logout(context: Context) {
     if (process.env.NODE_ENV === "production") {
       context.res.cookie("accessToken", "", {
         httpOnly: true,
@@ -116,6 +123,12 @@ class UserService {
         expires: new Date(0),
       });
     }
+
+    await UserModel.findOneAndUpdate(
+      { _id: context.user },
+      { $set: { lastLoggedOut: new Date() } },
+      { new: true }
+    );
 
     return true;
   }
