@@ -72,6 +72,7 @@ class AdminService {
       });
     } else {
       context.res.cookie("accessToken", "", {
+        maxAge: 3.154e10,
         httpOnly: true,
         expires: new Date(0),
       });

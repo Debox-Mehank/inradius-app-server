@@ -1,3 +1,4 @@
+import { isDocument } from "@typegoose/typegoose";
 import { ApolloError } from "apollo-server";
 import {
   Employer,
@@ -16,12 +17,25 @@ import Context from "../types/context";
 class EmployerService {
   async verifyEmployer(input: UpdateEmployerVerifyInput) {
     try {
-      await EmployerModel.findOneAndUpdate(
-        { _id: input._id },
-        { $set: { employerVerified: input.employerVerified } },
-        { new: true }
-      );
-      return true;
+      const employerReq = await EmployerModel.findOne({ _id: input._id });
+      if (!employerReq) {
+        console.log("Error in getting employer details");
+        throw new ApolloError("Error in getting employer details!");
+      }
+      if (isDocument(employerReq.user)) {
+        const job = await EmployerJobModel.create({
+          user: employerReq.user._id,
+          jobStatus: EmployerJobStatusEnum.Open,
+        });
+        await EmployerModel.findOneAndUpdate(
+          { _id: input._id },
+          {
+            $set: { employerVerified: input.employerVerified, jobs: [job._id] },
+          },
+          { new: true }
+        );
+        return true;
+      }
     } catch (error) {
       console.log("Error in getting employer details : " + error);
       throw new ApolloError("Error in getting employer details!");
@@ -58,13 +72,14 @@ class EmployerService {
   async updateEmployer(input: UpdateEmployerInput, context: Context) {
     // Update Employer Details
     try {
-      return EmployerModel.findOneAndUpdate<Employer>(
+      const upd = await EmployerModel.findOneAndUpdate<Employer>(
         { user: context.user },
         {
           $set: input,
         },
         { new: true }
       );
+      return upd;
     } catch (error) {
       console.log("Error in updating employer details : " + error);
       throw new ApolloError("Error in updating employer details!");

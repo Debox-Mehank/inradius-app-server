@@ -130,7 +130,6 @@ class UserService {
     const user = await getUserById(payload.id);
 
     if (!user) {
-      console.log("here2");
       throw new ApolloError("Something went wrong!");
     }
 
@@ -141,17 +140,16 @@ class UserService {
     if (user.type === UserRole.employee) {
       EmployeeModel.create({ user: user._id });
     } else if (user.type === UserRole.employer) {
-      const job = await EmployerJobModel.create({
-        user: user._id,
-        jobStatus: EmployerJobStatusEnum.Open,
-      });
+      // const job = await EmployerJobModel.create({
+      //   user: user._id,
+      //   jobStatus: EmployerJobStatusEnum.Open,
+      // });
       EmployerModel.create({
         user: user._id,
-        jobs: [job._id],
+        // jobs: [job._id],
         employerVerifyStatus: EmployerVerifyStatusEnum.DocumentsPending,
       });
     } else {
-      console.log("here1");
       throw new ApolloError("Something went wrong!");
     }
 
@@ -163,7 +161,6 @@ class UserService {
 
       return true;
     } catch (error) {
-      console.log("here3");
       throw new ApolloError("Something went wrong!");
     }
   }

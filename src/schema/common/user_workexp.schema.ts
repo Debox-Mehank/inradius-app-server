@@ -58,7 +58,7 @@ export class UserWorkExpInput {
   @Field(() => String)
   company: string;
 
-  @Field(() => DesignationEnum)
+  @Field(() => DesignationEnum, { nullable: true })
   designation: DesignationEnum;
 
   @Field(() => String)
