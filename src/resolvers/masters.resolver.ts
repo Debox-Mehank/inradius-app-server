@@ -6,6 +6,7 @@ import {
   Resolver,
   UseMiddleware,
 } from "type-graphql";
+import { EmployerJob } from "../schema/employer_jobs.schema";
 import {
   Benefit,
   BenefitInput,
@@ -185,6 +186,12 @@ export default class MastersResolver {
   @UseMiddleware([isAuth])
   allSkills(@Ctx() context: Context) {
     return this.service.allSkills(context);
+  }
+
+  @Query(() => [EmployerJob])
+  @UseMiddleware([isAuth, isAdmin])
+  allJobs() {
+    return this.service.allJobs();
   }
 
   @Query(() => [Survey])

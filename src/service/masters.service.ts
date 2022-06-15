@@ -1,4 +1,5 @@
 import { ApolloError } from "apollo-server";
+import { EmployerJobModel } from "../schema/employer_jobs.schema";
 import {
   BenefitInput,
   BenefitModel,
@@ -294,6 +295,10 @@ class MastersService {
     } else {
     return BenefitModel.find({});
     }
+  }
+
+  async allJobs() {
+    return EmployerJobModel.find({});
   }
 }
 
