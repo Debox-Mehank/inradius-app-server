@@ -150,23 +150,23 @@ class UserService {
       throw new ApolloError("Account already verified!");
     }
 
-    if (user.type === UserRole.employee) {
-      EmployeeModel.create({ user: user._id });
-    } else if (user.type === UserRole.employer) {
-      // const job = await EmployerJobModel.create({
-      //   user: user._id,
-      //   jobStatus: EmployerJobStatusEnum.Open,
-      // });
-      EmployerModel.create({
-        user: user._id,
-        // jobs: [job._id],
-        employerVerifyStatus: EmployerVerifyStatusEnum.DocumentsPending,
-      });
-    } else {
-      throw new ApolloError("Something went wrong!");
-    }
-
     try {
+      if (user.type === UserRole.employee) {
+        await EmployeeModel.create({ user: user._id });
+      } else if (user.type === UserRole.employer) {
+        // const job = await EmployerJobModel.create({
+        //   user: user._id,
+        //   jobStatus: EmployerJobStatusEnum.Open,
+        // });
+        await EmployerModel.create({
+          user: user._id,
+          // jobs: [job._id],
+          employerVerifyStatus: EmployerVerifyStatusEnum.DocumentsPending,
+        });
+      } else {
+        throw new ApolloError("Something went wrong!");
+      }
+
       await UserModel.updateOne(
         { _id: payload.id },
         { $set: { isAccountVerified: true } }
