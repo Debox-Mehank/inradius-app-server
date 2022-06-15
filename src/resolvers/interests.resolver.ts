@@ -50,7 +50,7 @@ export default class InterestsResolver {
     @Arg("jobId", () => String, { nullable: true }) jobId: String,
     @Ctx() context: Context
   ): Promise<Interests[]> {
-    return this.service.getShownInterests(context);
+    return this.service.getShownInterests(context, jobId);
   }
 
   @Query(() => [Interests])
@@ -59,6 +59,6 @@ export default class InterestsResolver {
     @Arg("jobId", () => String, { nullable: true }) jobId: String,
     @Ctx() context: Context
   ): Promise<Interests[]> {
-    return this.service.getMatched(context);
+    return this.service.getMatched(context, jobId);
   }
 }
