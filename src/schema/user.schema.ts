@@ -15,9 +15,21 @@ export enum UserRole {
   employer = "employer",
 }
 
+export enum UserStatus {
+  pending = "pending",
+  active = "active",
+  deactivedByAdmin = "deactivedByAdmin",
+  deactivedByPaymentFailure = "deactivedByPaymentFailure",
+}
+
 registerEnumType(UserRole, {
   name: "UserRole",
   description: "Enum For Type of User Roles i.e. Employer & Employee",
+});
+
+registerEnumType(UserStatus, {
+  name: "UserStatus",
+  description: "Enum For Type of User Status",
 });
 
 @pre<User>("save", async function () {
@@ -64,6 +76,10 @@ export class User {
   @Field(() => UserRole)
   @prop({ required: true })
   type: UserRole;
+
+  @Field(() => UserStatus)
+  @prop({ required: false, default: UserStatus.pending })
+  userStatus: UserStatus;
 
   @Field(() => Boolean)
   @prop({ required: true, default: false })
