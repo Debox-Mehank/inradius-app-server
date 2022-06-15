@@ -14,6 +14,7 @@ import {
   EmailVerifyInput,
   LoginInput,
   RegisterInput,
+  UpdateUserStatusInput,
   UserModel,
   UserRole,
   UserStatus,
@@ -235,6 +236,19 @@ class UserService {
       return true;
     } catch (error) {
       console.log("Error In Updating Profile Status : " + error);
+      return false;
+    }
+  }
+
+  async updateUserStatus(input: UpdateUserStatusInput) {
+    try {
+      await UserModel.updateOne(
+        { _id: input.id},
+        { $set: { userStatus: input.userStatus} }
+      );
+      return true;
+    } catch (error) {
+      console.log("Error In Updating User Status : " + error);
       return false;
     }
   }

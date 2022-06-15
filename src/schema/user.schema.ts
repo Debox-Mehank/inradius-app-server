@@ -175,8 +175,12 @@ export class ResendEmailVerifyInput {
   token: string;
 }
 
-// @InputType()
-// export class UpdateUserStatusInput {
-//   @Field(() => UserStatus)
-//   userStatus: UserStatus;
-// }
+@InputType()
+export class UpdateUserStatusInput {
+
+  @Field(() => String, { nullable: false })
+  id: string;
+
+  @Field(() => UserStatus, {nullable: false})
+  userStatus: UserStatus;
+}

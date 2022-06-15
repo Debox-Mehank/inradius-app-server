@@ -11,12 +11,13 @@ import {
   EmailVerifyInput,
   LoginInput,
   RegisterInput,
+  UpdateUserStatusInput,
   User,
 } from "../schema/user.schema";
 import UserService from "../service/user.service";
 import Context from "../types/context";
 import { getUserById } from "../utils/helper";
-import { isAuth } from "../utils/permissions";
+import { isAdmin, isAuth } from "../utils/permissions";
 
 @Resolver()
 export default class UserResolver {
@@ -77,5 +78,11 @@ export default class UserResolver {
     } else {
       throw new ApolloError("Invalid User!");
     }
+  }
+
+  @Query(() => Boolean)
+  @UseMiddleware([isAuth, isAdmin])
+  updateUserStatus(@Arg("status") status: UpdateUserStatusInput) {
+    return this.userService.updateUserStatus(status);
   }
 }
