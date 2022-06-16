@@ -19,7 +19,7 @@ class RuleService{
       try {
         return await RuleModel.findByIdAndUpdate(
           input.id,
-          { weightage: input.weightage, type: input.type, match: input.matchType },
+          { weightage: input.weightage, active: input.active, type: input.type, match: input.matchType },
           { new: true }
         );
       } catch (error) {

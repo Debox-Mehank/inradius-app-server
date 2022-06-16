@@ -15,6 +15,10 @@ export class Rule {
   @prop()
   matchType: MatchType; 
 
+  @Field(() => Boolean)
+  @prop({ default: true })
+  active: boolean;
+
   @Field(() => Float)
   @prop({ required: false })
   weightage: number;
@@ -70,6 +74,9 @@ export class RuleInput {
 
   @Field(() => MatchType, { nullable: false })
   matchType: MatchType; 
+
+  @Field(() => Boolean, {nullable: true})
+  active: boolean;
 }
 
 @InputType()
@@ -83,6 +90,9 @@ export class UpdateRuleInput {
   @Field(() => MatchType, { nullable: true })
   matchType: MatchType; 
 
-  @Field(() => Float, { nullable: false })
+  @Field(() => Float, { nullable: true })
   weightage: number;
+
+  @Field(() => Boolean, {nullable: true})
+  active: boolean;
 }
