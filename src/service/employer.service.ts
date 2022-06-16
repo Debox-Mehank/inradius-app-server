@@ -12,6 +12,7 @@ import {
   EmployerJobModel,
   EmployerJobStatusEnum,
 } from "../schema/employer_jobs.schema";
+import { UserRole } from "../schema/user.schema";
 import Context from "../types/context";
 
 class EmployerService {
@@ -89,13 +90,24 @@ class EmployerService {
   async updateEmployerJob(input: EmployerJobInput, context: Context) {
     // Update Employer Job Details
     try {
-      return EmployerJobModel.findOneAndUpdate<EmployerJob>(
-        { user: context.user, _id: input._id },
-        {
-          $set: input,
-        },
-        { new: true }
-      );
+      if (context.role === UserRole.employer) {
+        return EmployerJobModel.findOneAndUpdate<EmployerJob>(
+            { user: context.user, _id: input._id },
+            {
+              $set: input,
+            },
+            { new: true }
+          );
+      }
+      else if(context.role !== UserRole.employee){
+        return EmployerJobModel.findOneAndUpdate<EmployerJob>(
+          {_id: input._id},
+          {
+            $set: input
+          },
+          { new: true }
+        )
+      }
     } catch (error) {
       console.log("Error in updating employer job details : " + error);
       throw new ApolloError("Error in updating employer job details!");
