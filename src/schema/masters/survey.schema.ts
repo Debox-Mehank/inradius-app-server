@@ -17,7 +17,7 @@ registerEnumType(SurveyType, {
   description: "Enum For Type of Survey User Roles i.e. Employer & Employee",
 });
 
-@index({ industry: 1 })
+@index({ survey: 1 })
 @ObjectType()
 export class Survey {
   @Field(() => ID)

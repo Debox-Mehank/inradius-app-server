@@ -7,6 +7,7 @@ import DashboardResolver from "./dashboard.resolver";
 import InterestsResolver from "./interests.resolver";
 import LoginContentResolver from "./login.content.resolver";
 import RegisterContentResolver from "./register.content.resolver";
+import RuleResolver from "./rule.resolver";
 
 export const resolvers = [
   UserResolver,
@@ -17,5 +18,6 @@ export const resolvers = [
   DashboardResolver,
   InterestsResolver,
   LoginContentResolver,
-  RegisterContentResolver
+  RegisterContentResolver,
+  RuleResolver,
 ] as const;

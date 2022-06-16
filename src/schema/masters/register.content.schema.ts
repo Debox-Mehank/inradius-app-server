@@ -1,7 +1,7 @@
 import { getModelForClass, index, prop } from "@typegoose/typegoose";
 import { Field, ID, InputType, ObjectType, registerEnumType } from "type-graphql";
 
-@index({ location: 1 })
+@index({ registerContent: 1 })
 @ObjectType()
 export class RegisterContent {
   @Field(() => ID)

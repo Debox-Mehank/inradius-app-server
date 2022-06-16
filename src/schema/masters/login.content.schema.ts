@@ -1,7 +1,7 @@
 import { getModelForClass, index, prop } from "@typegoose/typegoose";
 import { Field, ID, InputType, ObjectType } from "type-graphql";
 
-@index({ location: 1 })
+@index({ loginContent: 1 })
 @ObjectType()
 export class LoginContent {
   @Field(() => ID)

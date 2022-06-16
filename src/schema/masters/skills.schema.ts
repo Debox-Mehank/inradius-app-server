@@ -1,7 +1,6 @@
 import { getModelForClass, index, plugin, prop } from "@typegoose/typegoose";
 import mongooseAutoPopulate from "mongoose-autopopulate";
 import { Field, ID, InputType, ObjectType } from "type-graphql";
-import { SubDomain } from "./domain.schema";
 
 @plugin(mongooseAutoPopulate)
 @index({ skill: 1 })
