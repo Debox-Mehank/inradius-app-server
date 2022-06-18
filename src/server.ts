@@ -51,6 +51,7 @@ async function bootstrap() {
       credentials: true,
       origin: [
         "http://localhost:3000",
+        "http://localhost:3001",
         "https://inradius.in",
         "https://dev.inradius.in",
         "https://admin.inradius.in",

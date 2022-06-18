@@ -109,7 +109,7 @@ class DashboardService {
                   isDocumentArray(employee.subDomain) &&
                   isDocumentArray(employee.skills)
                 ) {
-                  console.log(job.jobTitle, job.latitude, job.longitude);
+                  // console.log(job.jobTitle, job.latitude, job.longitude);
                   if (
                     job.location._id.toString() ===
                       employee.location._id.toString() &&
