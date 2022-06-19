@@ -23,13 +23,13 @@ export default class RegisterContentResolver {
   }
 
   @Query(() => [RegisterContent])
-  // @UseMiddleware([isAuth])
   allRegisterContent(
     @Arg("type", () => RegisterContentType, { nullable: true })
-    type: RegisterContentType,
-    @Ctx() context: Context
+    @Ctx()
+    context: Context,
+    type?: RegisterContentType
   ) {
-    return this.service.allRegisterContent(type, context);
+    return this.service.allRegisterContent(context, type);
   }
 
   @Mutation(() => RegisterContent)

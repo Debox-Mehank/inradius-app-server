@@ -22,7 +22,6 @@ export default class LoginContentResolver {
   }
 
   @Query(() => [LoginContent])
-  // @UseMiddleware([isAuth])
   allLoginContent(@Ctx() context: Context) {
     return this.service.allLoginContent(context);
   }

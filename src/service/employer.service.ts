@@ -24,14 +24,14 @@ class EmployerService {
         throw new ApolloError("Error in getting employer details!");
       }
       if (isDocument(employerReq.user)) {
-        const job = await EmployerJobModel.create({
-          user: employerReq.user._id,
-          jobStatus: EmployerJobStatusEnum.Open,
-        });
+        // const job = await EmployerJobModel.create({
+        //   user: employerReq.user._id,
+        //   jobStatus: EmployerJobStatusEnum.Open,
+        // });
         await EmployerModel.findOneAndUpdate(
           { _id: input._id },
           {
-            $set: { employerVerified: input.employerVerified, jobs: [job._id] },
+            $set: { employerVerified: input.employerVerified },
           },
           { new: true }
         );
@@ -92,21 +92,20 @@ class EmployerService {
     try {
       if (context.role === UserRole.employer) {
         return EmployerJobModel.findOneAndUpdate<EmployerJob>(
-            { user: context.user, _id: input._id },
-            {
-              $set: input,
-            },
-            { new: true }
-          );
-      }
-      else if(context.role !== UserRole.employee){
-        return EmployerJobModel.findOneAndUpdate<EmployerJob>(
-          {_id: input._id},
+          { user: context.user, _id: input._id },
           {
-            $set: input
+            $set: input,
           },
           { new: true }
-        )
+        );
+      } else if (context.role !== UserRole.employee) {
+        return EmployerJobModel.findOneAndUpdate<EmployerJob>(
+          { _id: input._id },
+          {
+            $set: input,
+          },
+          { new: true }
+        );
       }
     } catch (error) {
       console.log("Error in updating employer job details : " + error);
